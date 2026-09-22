@@ -15,7 +15,7 @@
 <!-- ============ ESCENA: BALCON DE NOCHE ============ -->
 <section id="terraza" class="escena">
   <svg class="escena__svg" viewBox="0 0 1200 760" preserveAspectRatio="xMidYMid slice" role="img"
-       aria-label="El balcon de un piso de noche, con dos sillas, una mesita con un ramo de flores moradas y una silueta sentada mirando la ciudad.">
+       aria-label="El balcon de un piso de noche, con dos sillas, una mesita con un ramo de flores moradas y un hombre sentado de espaldas mirando la ciudad.">
     <defs>
       <linearGradient id="gCielo" gradientUnits="userSpaceOnUse" x1="0" y1="-900" x2="0" y2="470">
         <stop offset="0%"   stop-color="#03010a"/>
@@ -61,6 +61,29 @@
         <stop offset="0%"   stop-color="#000" stop-opacity=".55"/>
         <stop offset="100%" stop-color="#000" stop-opacity="0"/>
       </linearGradient>
+      <radialGradient id="gBrasa">
+        <stop offset="0%"   stop-color="#ff8a3d" stop-opacity=".45"/>
+        <stop offset="100%" stop-color="#ff8a3d" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="gLuzSilla">
+        <stop offset="0%"   stop-color="#ffcf7a" stop-opacity=".13"/>
+        <stop offset="60%"  stop-color="#ffcf7a" stop-opacity=".04"/>
+        <stop offset="100%" stop-color="#f2d79b" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="gPantalla">
+        <stop offset="0%"   stop-color="#cfd9ff" stop-opacity=".45"/>
+        <stop offset="100%" stop-color="#cfd9ff" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="gHaloAmarillo">
+        <stop offset="0%"   stop-color="#ffd966" stop-opacity=".45"/>
+        <stop offset="100%" stop-color="#ffd966" stop-opacity="0"/>
+      </radialGradient>
+      <!-- cola de las estrellas fugaces: transparente atras, blanca en la cabeza -->
+      <linearGradient id="gFugaz" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%"   stop-color="#f4ecfd" stop-opacity="0"/>
+        <stop offset="70%"  stop-color="#e9dcff" stop-opacity=".45"/>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity=".95"/>
+      </linearGradient>
       <clipPath id="cSuelo">
         <path d="M256 580 L944 580 L1080 1400 L120 1400 Z"/>
       </clipPath>
@@ -96,6 +119,9 @@
       <ellipse cx="420" cy="-46" rx="160" ry="9" fill="#c08ada"/>
     </g>
 
+    <!-- Estrellas fugaces (las lanza escena.js) -->
+    <g id="fugaces"></g>
+
     <!-- Resplandor de la ciudad sobre el horizonte -->
     <ellipse cx="600" cy="452" rx="1300" ry="96" fill="url(#gHorizonte)"/>
 
@@ -114,6 +140,9 @@
     <rect x="-700" y="466" width="2600" height="740" fill="url(#gAbajo)"/>
     <g id="ciudadCerca"></g>
     <g id="farolas"></g>
+
+    <!-- Nieve lejana, cayendo sobre la ciudad (escena.js) -->
+    <g id="nieveLejos"></g>
 
     <!-- ========================================================
          3. EL BALCON
@@ -154,10 +183,37 @@
       <path d="M954 586 L954 400" stroke="#d9c2f2" stroke-opacity=".09" stroke-width="2" fill="none"/>
     </g>
 
+    <!-- Calendario colgado en el muro, con el 9 de noviembre marcado -->
+    <g transform="translate(214 418) skewY(5) scale(.72 1)">
+      <line x1="22" y1="-8" x2="22" y2="0" stroke="#6d5a8c" stroke-width="1"/>
+      <circle cx="22" cy="-8" r="1.4" fill="#8a76ad"/>
+      <rect x="0" y="0" width="44" height="50" rx="1.5" fill="#bdb3d4" opacity=".78"/>
+      <rect x="0" y="0" width="44" height="11" rx="1.5" fill="#5b2d91" opacity=".9"/>
+      <text x="22" y="8.4" text-anchor="middle" font-family="Georgia,serif" font-size="7.5"
+            letter-spacing="1" fill="#f3e9ff">NOV</text>
+      <g id="diasCalendario" fill="#6d6285"></g>
+      <circle class="dia-marcado" cx="0" cy="0" r="3.4" fill="none" stroke="#8b3fd9" stroke-width="1.3"/>
+    </g>
+
     <!-- Postes de la barandilla contra los muros -->
     <g fill="#0c0617">
       <rect x="252" y="478" width="18" height="108" rx="5"/>
       <rect x="930" y="478" width="18" height="108" rx="5"/>
+    </g>
+
+    <!-- Nieve acumulada: barandilla, postes, muros y el pie de la barandilla -->
+    <g id="nieveAcumulada" fill="#eef0fb">
+      <path d="M256 489 L256 486 Q 300 479, 340 483 T 430 482 T 520 484 T 610 481 T 700 484
+               T 790 482 T 880 483 T 944 485 L 944 489 Z" opacity=".82"/>
+      <path d="M256 575 L256 573 Q 320 568, 390 571 T 530 570 T 670 571 T 810 569 T 944 572 L 944 575 Z" opacity=".55"/>
+      <ellipse cx="261" cy="478" rx="11" ry="3.5" opacity=".85"/>
+      <ellipse cx="939" cy="478" rx="11" ry="3.5" opacity=".85"/>
+      <path d="M256 392 L150 324 L150 317 Q 204 344, 256 385 Z" opacity=".7"/>
+      <path d="M944 392 L1050 324 L1050 317 Q 996 344, 944 385 Z" opacity=".75"/>
+      <path d="M270 590 Q 430 580, 600 586 T 930 588 L 930 593 Q 600 589, 270 594 Z" opacity=".22"/>
+      <!-- brillo frio en el borde de la nieve -->
+      <path d="M258 484 Q 300 478, 340 482 T 430 481 T 520 483 T 610 480 T 700 483 T 790 481 T 880 482 T 942 484"
+            fill="none" stroke="#ffffff" stroke-opacity=".5" stroke-width="1"/>
     </g>
 
     <!-- Luz calida sobre el suelo -->
@@ -167,18 +223,6 @@
     <path id="guirnalda" d="M 164 334 Q 600 398 1036 334" fill="none"
           stroke="#d9c2f2" stroke-opacity=".22" stroke-width="1.6"/>
     <g id="bombillas"></g>
-
-    <!-- Maceta en el rincon -->
-    <g fill="#0a0517">
-      <g transform="translate(292 700) scale(.72)">
-        <path d="M-26 0 L-20 -50 L20 -50 L26 0 Z"/>
-        <rect x="-28" y="-56" width="56" height="9" rx="4"/>
-        <ellipse cx="0"   cy="-84"  rx="34" ry="26"/>
-        <ellipse cx="-20" cy="-100" rx="22" ry="19"/>
-        <ellipse cx="19"  cy="-104" rx="24" ry="20"/>
-        <ellipse cx="0"   cy="-118" rx="18" ry="16"/>
-      </g>
-    </g>
 
     <!-- Sombras en el suelo -->
     <g fill="url(#gSombraSuelo)">
@@ -233,6 +277,15 @@
       </g>
     </g>
 
+    <!-- Luz sobre la silla vacia, como si esperara a alguien (mensaje "ser la luz") -->
+    <g class="luz-silla">
+      <ellipse cx="802" cy="742" rx="140" ry="26" fill="url(#gLuzSilla)"/>
+      <ellipse cx="802" cy="652" rx="100" ry="92" fill="url(#gLuzSilla)"/>
+      <path d="M773 611 C 793 605, 821 605, 841 611" fill="none" stroke="#f2d79b"
+            stroke-opacity=".55" stroke-width="2" stroke-linecap="round" filter="url(#fSuave)"/>
+      <path d="M746 613 L858 613" stroke="#f2d79b" stroke-opacity=".35" stroke-width="2" stroke-linecap="round"/>
+    </g>
+
     <!-- ========================================================
          5. SILLA IZQUIERDA + SILUETA
          ======================================================== -->
@@ -242,81 +295,68 @@
       <rect x="428" y="688" width="8" height="44" rx="4"/>
     </g>
 
-    <!-- la persona: se dibuja primero, el respaldo la tapa por delante -->
-    <g class="respira" transform="rotate(1.6 398 700)" fill="#06030c">
-      <!-- torso: los hombros se abren y los brazos asoman por los lados del respaldo -->
-      <path d="M318 700
-               C 318 652, 326 622, 344 606
-               C 358 592, 374 580, 390 576
-               L 408 576
-               C 424 580, 440 592, 454 606
-               C 472 622, 480 652, 480 700 Z"/>
-
+    <!-- el, visto de espaldas: cabeza, nuca y hombros asoman por encima
+         del respaldo, que se dibuja despues y lo tapa por delante -->
+    <g class="respira">
+      <!-- espalda y hombros, mas anchos -->
+      <path d="M346 700
+               C 342 660, 340 622, 344 604
+               C 348 590, 362 584, 376 580
+               C 383 577, 387 571, 389 562
+               L 407 562
+               C 409 571, 413 577, 420 580
+               C 434 584, 448 590, 452 604
+               C 456 622, 454 660, 450 700 Z" fill="#06030c"/>
       <!-- cuello -->
-      <path d="M389 540 L409 540 C 410 554, 411 566, 413 576
-               L 385 576 C 387 566, 388 554, 389 540 Z"/>
+      <path d="M389 548 L407 548 L408 566 L388 566 Z" fill="#06030c"/>
 
-      <!-- melena: enmarca la cabeza y cae hasta los hombros -->
-      <path d="M398 474
-               C 415 474, 423 488, 422 504
-               C 426 520, 426 544, 422 562
-               C 420 571, 417 577, 412 580
-               C 417 566, 418 546, 416 532
-               C 412 543, 406 548, 398 548
-               C 390 548, 384 543, 380 532
-               C 378 546, 379 566, 384 580
-               C 379 577, 376 571, 374 562
-               C 370 544, 370 520, 374 504
-               C 373 488, 381 474, 398 474 Z"/>
-
-      <!-- cabeza -->
-      <ellipse cx="398" cy="520" rx="23" ry="25"/>
-
-      <!-- recogido -->
-      <ellipse cx="399" cy="486" rx="13" ry="11"/>
-      <path d="M385 492 C 390 499, 408 499, 413 492 C 410 497, 388 497, 385 492 Z"/>
-      <!-- mechon suelto que se mueve con el aire -->
-      <path class="mechon" d="M377 520 C 369 540, 367 562, 372 580
-                              C 369 562, 371 540, 375 524 Z"/>
-
-      <!-- brazo derecho: hombro, codo y antebrazo hasta la mesa -->
-      <path d="M452 596
-               C 470 602, 486 616, 495 629
-               C 507 636, 523 641, 536 644
-               C 545 646, 547 653, 540 655
-               C 526 656, 508 650, 493 642
-               C 477 634, 461 620, 450 606 Z"/>
-      <!-- mano apoyada en el borde de la mesa -->
-      <path d="M534 641 C 546 639, 556 643, 556 649
-               C 556 655, 547 658, 538 656
-               C 530 654, 528 645, 534 641 Z"/>
-      <ellipse cx="549" cy="652" rx="3.6" ry="2.4" fill="#0d0718"/>
-      <ellipse cx="543" cy="656" rx="3.6" ry="2.2" fill="#0d0718"/>
-
-      <!-- piernas bajo el asiento -->
-      <path d="M372 693 C 367 714, 365 733, 369 748 L 389 748
-               C 386 731, 388 712, 391 693 Z"/>
-      <path d="M409 693 C 412 714, 414 733, 410 748 L 430 748
-               C 429 731, 427 712, 425 693 Z"/>
-      <ellipse cx="374" cy="750" rx="15" ry="6"/>
-      <ellipse cx="424" cy="750" rx="15" ry="6"/>
-    </g>
-
-    <!-- luz de luna rozando la silueta -->
-    <g class="respira" transform="rotate(1.6 398 700)" fill="none"
-       stroke-linecap="round" filter="url(#fSuave)">
-      <g stroke="#efe3fb">
-        <path d="M405 476 A 13 11 0 0 1 413 488" stroke-width="2" stroke-opacity=".30"/>
-        <path d="M414 488 C 422 500, 425 514, 423 532" stroke-width="2.8" stroke-opacity=".44"/>
-        <path d="M424 540 C 426 556, 424 570, 418 581" stroke-width="2.2" stroke-opacity=".28"/>
-        <path d="M418 578 C 438 584, 452 596, 462 614" stroke-width="2.4" stroke-opacity=".30"/>
+      <!-- cabeza, un poco ladeada hacia la luna. El grupo .cabeza es el que gira
+           hacia la silla vacia en el mensaje de "ser la luz" -->
+      <g transform="translate(0 5) rotate(3 398 566)">
+       <g class="cabeza">
+        <!-- orejas -->
+        <ellipse cx="379" cy="536" rx="4" ry="6.5" fill="#06030c"/>
+        <ellipse class="oreja-der" cx="417" cy="536" rx="4" ry="6.5" fill="#06030c"/>
+        <!-- mejilla y nariz: solo asoman al girar la cabeza -->
+        <path class="perfil" d="M414 524 C 420 526, 424 530, 426 535
+                                C 427 537, 424 538, 422 539
+                                C 422 543, 419 547, 413 550 Z" fill="#06030c"/>
+        <ellipse cx="398" cy="532" rx="18" ry="21" fill="#06030c"/>
+        <!-- pelo corto: cubre la coronilla y acaba en la nuca -->
+        <path d="M398 509
+                 C 413 509, 421 518, 421 530
+                 C 421 537, 419 541, 417 543
+                 C 414 548, 408 551, 398 551
+                 C 388 551, 382 548, 379 543
+                 C 377 541, 375 537, 375 530
+                 C 375 518, 383 509, 398 509 Z" fill="#0c0619"/>
+        <path d="M383 546 C 390 549, 406 549, 413 546" fill="none"
+              stroke="#1c1234" stroke-width="1" stroke-linecap="round" opacity=".5"/>
+       </g>
       </g>
-      <!-- la vela le da un poco de calido al brazo -->
-      <g stroke="#f2d79b">
-        <path d="M460 604 C 476 612, 488 622, 496 631" stroke-width="2" stroke-opacity=".26"/>
-        <path d="M503 635 C 518 641, 532 645, 543 647" stroke-width="1.6" stroke-opacity=".20"/>
+
+      <!-- luz de luna rozando la silueta por la derecha -->
+      <g fill="none" stroke="#efe3fb" stroke-linecap="round" filter="url(#fSuave)">
+        <g transform="translate(0 5) rotate(3 398 566)">
+         <g class="cabeza">
+          <path d="M405 510 C 415 513, 421 521, 421 533" stroke-width="2.4" stroke-opacity=".44"/>
+          <path class="oreja-der" d="M420 531 C 422 535, 422 539, 419 542" stroke-width="1.6" stroke-opacity=".28"/>
+          <path d="M389 511 C 382 515, 377 521, 376 529" stroke-width="1.4" stroke-opacity=".12"/>
+          <path class="perfil" d="M421 527 C 424 530, 427 534, 425 538" stroke-width="1.6" stroke-opacity=".45"/>
+         </g>
+        </g>
+        <path d="M408 560 C 410 570, 414 576, 420 579" stroke-width="1.6" stroke-opacity=".22"/>
+        <path d="M424 581 C 438 585, 449 593, 452 604" stroke-width="2.2" stroke-opacity=".28"/>
+        <path d="M368 580 C 356 585, 348 593, 345 604" stroke-width="1.4" stroke-opacity=".10"/>
       </g>
     </g>
+
+    <!-- brazo derecho: baja por el lado del respaldo hasta el codo -->
+    <path d="M442 590
+             C 456 594, 464 608, 467 622
+             C 470 632, 473 637, 476 641
+             C 471 654, 458 656, 452 647
+             C 448 632, 446 616, 438 604 Z" fill="#06030c"/>
 
     <!-- respaldo por delante de la persona -->
     <g fill="#100926">
@@ -341,13 +381,14 @@
          6. MESITA
          ======================================================== -->
     <g>
+      <!-- pie y base, por detras del tablero -->
+      <rect x="588" y="622" width="24" height="98" rx="8" fill="#0a0517"/>
+      <ellipse cx="600" cy="722" rx="56" ry="13" fill="#0a0517"/>
+      <ellipse cx="600" cy="722" rx="56" ry="13" fill="none" stroke="#c79cf0" stroke-opacity=".10"/>
       <ellipse cx="600" cy="622" rx="94" ry="22" fill="#0a0517"/>
       <ellipse cx="600" cy="618" rx="94" ry="22" fill="#1c1134"/>
       <ellipse cx="600" cy="618" rx="94" ry="22" fill="none" stroke="#c79cf0" stroke-opacity=".26"/>
       <path d="M528 610 C 548 600, 596 598, 640 604" fill="none" stroke="#e0c6f7" stroke-opacity=".14" stroke-width="2.5" stroke-linecap="round"/>
-      <rect x="588" y="622" width="24" height="98" rx="8" fill="#0a0517"/>
-      <ellipse cx="600" cy="722" rx="56" ry="13" fill="#0a0517"/>
-      <ellipse cx="600" cy="722" rx="56" ry="13" fill="none" stroke="#c79cf0" stroke-opacity=".10"/>
     </g>
 
     <!-- Velita en vaso (lado de la silueta) -->
@@ -356,6 +397,23 @@
       <path d="M530 606 L528 582 C 528 578, 548 578, 548 582 L546 606 Z" fill="#2a1a45" opacity=".85"/>
       <ellipse cx="538" cy="580" rx="10" ry="3" fill="#3a2659"/>
       <ellipse cx="538" cy="575" rx="4.5" ry="7.5" fill="#f2d79b" class="bombilla" filter="url(#fBrillo)"/>
+    </g>
+
+    <!-- Taza humeante junto a la vela -->
+    <g>
+      <path d="M572 594 C 580 594, 581 603, 572 603" fill="none" stroke="#4a3474" stroke-width="2.4"/>
+      <path d="M553 590 L553 605 C 553 610, 571 610, 571 605 L571 590 Z" fill="#3d2a63"/>
+      <path d="M553 590 L553 605 C 553 607, 556 608.5, 559 609" fill="none"
+            stroke="#f2d79b" stroke-opacity=".30" stroke-width="1.4"/>
+      <ellipse cx="562" cy="590" rx="9" ry="2.8" fill="#4d3878"/>
+      <ellipse cx="562" cy="590.6" rx="7.4" ry="2" fill="#2a160e"/>
+      <ellipse cx="562" cy="590" rx="9" ry="2.8" fill="none" stroke="#cdb8f0" stroke-opacity=".35" stroke-width=".8"/>
+      <g fill="none" stroke="#eef0fb" stroke-linecap="round" filter="url(#fSuave)">
+        <path class="vapor" d="M559 586 C 555 578, 564 572, 559 563 C 555 556, 562 550, 559 543"
+              stroke-width="2" stroke-opacity=".32"/>
+        <path class="vapor vapor--2" d="M565 586 C 569 578, 561 571, 566 563 C 570 556, 563 550, 566 544"
+              stroke-width="1.6" stroke-opacity=".24"/>
+      </g>
     </g>
 
     <!-- Cenicero con un cigarro encendido, al lado de la silla vacia -->
@@ -379,7 +437,10 @@
         <rect x="664" y="603.4" width="30" height="5"  rx="2.2" fill="#ece5d6"/>
         <rect x="690" y="603.4" width="6"  height="5"  rx="2.2" fill="#6b6170"/>
         <circle cx="697" cy="605.9" r="2.7" fill="#ff7a3a" class="brasa" filter="url(#fBrillo)"/>
+        <!-- cuando la brasa se aviva (escena.js) -->
+        <circle id="brasaHalo" cx="697" cy="605.9" r="5" fill="#ffab5e" opacity="0" filter="url(#fBrillo)"/>
       </g>
+      <ellipse id="brasaLuz" cx="690" cy="606" rx="46" ry="13" fill="url(#gBrasa)" opacity="0"/>
 
       <!-- humo -->
       <g fill="none" stroke="#e6dcf5" stroke-linecap="round" filter="url(#fSuave)">
@@ -387,8 +448,68 @@
               stroke-width="2.2" stroke-opacity=".30"/>
         <path class="humo humo--2" d="M698 596 C 691 582, 704 570, 697 557 C 691 545, 701 535, 697 524"
               stroke-width="1.6" stroke-opacity=".20"/>
+        <path id="humoAviva" d="M696 592 C 706 576, 686 562, 698 546 C 708 532, 690 520, 700 504"
+              stroke-width="3" stroke-opacity=".32" opacity="0"/>
+      </g>
+      <g id="chispas"></g>
+    </g>
+
+    <!-- Paquete de tabaco y mechero, junto al cenicero -->
+    <g>
+      <!-- paquete tumbado -->
+      <path d="M618 616 L644 615 L647 621 L621 622 Z" fill="#d6ccbb" opacity=".88"/>
+      <path d="M636 615.4 L640.5 615.2 L643.5 621.1 L639 621.3 Z" fill="#7a2b44"/>
+      <path d="M621 622 L647 621 L647 626.5 L621 627.5 Z" fill="#8a8072"/>
+      <path d="M618 616 L621 622 L621 627.5 L618 621.5 Z" fill="#5e574f"/>
+      <path d="M619 616.6 L643 615.7" stroke="#fff6e4" stroke-opacity=".35" stroke-width=".8"/>
+      <!-- mechero -->
+      <path d="M651 623 L675 622 L677 625.5 L653 626.5 Z" fill="#7d3b63"/>
+      <path d="M653 626.5 L677 625.5 L677 628 L653 629 Z" fill="#4a2040"/>
+      <path d="M670 622.2 L675 622 L677 625.5 L672 625.7 Z" fill="#a9a3b5"/>
+      <path d="M672 625.7 L677 625.5 L677 628 L672 628.2 Z" fill="#6d6878"/>
+      <path d="M653 623.6 L669 623" stroke="#f0c7e0" stroke-opacity=".35" stroke-width=".8"/>
+    </g>
+
+    <!-- Movil apagado, boca arriba -->
+    <g>
+      <path d="M557 632.5 L587 630.5 L587 632 L557 634 Z" fill="#05030a"/>
+      <path d="M553 624 L583 622.5 L587 630.5 L557 632.5 Z" fill="#0a0712"
+            stroke="#8a76ad" stroke-opacity=".45" stroke-width=".8"/>
+      <path d="M555.6 624.8 L581.6 623.5 L584.8 629.9 L558.8 631.3 Z" fill="#110b1c"/>
+      <!-- reflejo de la luna en la pantalla -->
+      <path d="M566 624.5 L572 624.2 L566 631 L561 631.2 Z" fill="#d9c2f2" opacity=".07"/>
+      <!-- se enciende en el ultimo mensaje -->
+      <g class="movil-luz">
+        <ellipse cx="570" cy="626" rx="44" ry="14" fill="url(#gPantalla)"/>
+        <path d="M555.6 624.8 L581.6 623.5 L584.8 629.9 L558.8 631.3 Z" fill="#dfe6ff"/>
+        <path d="M559 626.2 L574 625.5 L574.8 627 L559.8 627.7 Z" fill="#7b86b8" opacity=".6"/>
       </g>
     </g>
+
+    <!-- Nota doblada bajo el jarron: aparece en el ultimo mensaje -->
+    <g id="nota" opacity="0">
+      <ellipse cx="582" cy="617" rx="26" ry="8" fill="url(#gLuzSilla)"/>
+      <path d="M561 612 L600 611 L603 620 L564 621 Z" fill="#efe6d6"/>
+      <path d="M561 612 L600 611 L601.5 615.5 L562.5 616.5 Z" fill="#ffffff" opacity=".35"/>
+      <path d="M562.5 616.5 L601.5 615.5" stroke="#b9ab96" stroke-width=".7"/>
+      <!-- una florecita morada dibujada en la tarjeta -->
+      <g transform="translate(571 618.3) scale(.55 .3)" fill="#8b52c9">
+        <circle cx="0" cy="-4" r="3"/><circle cx="3.8" cy="-1.2" r="3"/><circle cx="2.4" cy="3.2" r="3"/>
+        <circle cx="-2.4" cy="3.2" r="3"/><circle cx="-3.8" cy="-1.2" r="3"/>
+        <circle r="1.8" fill="#edd9a6"/>
+      </g>
+    </g>
+
+    <!-- antebrazo y mano apoyados junto al movil -->
+    <path d="M456 638
+             C 470 632, 484 626, 494 621
+             C 499 618, 503 616, 507 614
+             C 514 609, 525 610, 526 617
+             C 527 624, 517 628, 508 628
+             C 496 631, 482 642, 470 652
+             C 462 656, 454 650, 456 638 Z" fill="#06030c"/>
+    <path d="M470 633 C 482 628, 494 622, 504 616 C 510 612, 518 611, 522 612" fill="none"
+          stroke="#f2d79b" stroke-opacity=".28" stroke-width="1.6" stroke-linecap="round" filter="url(#fSuave)"/>
 
     <!-- ========================================================
          7. RAMO DE FLORES MORADAS
@@ -423,18 +544,96 @@
         </g>
         <!-- flores (las dibuja escena.js) -->
         <g id="flores"></g>
+
+        <!-- la flor amarilla: brota con el mensaje de las flores amarillas -->
+        <g id="florAmarilla" opacity="0">
+          <path id="talloAmarillo" d="M600 574 C 606 540, 616 506, 622 478" pathLength="1"
+                stroke="#38684a" stroke-width="3" stroke-linecap="round" fill="none"
+                stroke-dasharray="1" stroke-dashoffset="1" opacity=".75"/>
+          <g transform="translate(622 478) scale(1.05)">
+            <g id="corolaAmarilla" transform="scale(0)">
+              <circle r="26" fill="url(#gHaloAmarillo)"/>
+              <g fill="#f5c842">
+                <ellipse cx="0"     cy="-6.6" rx="5.4" ry="4.2" transform="rotate(-90 0 -6.6)"/>
+                <ellipse cx="6.28"  cy="-2.04" rx="5.4" ry="4.2" transform="rotate(-18 6.28 -2.04)"/>
+                <ellipse cx="3.88"  cy="5.34" rx="5.4" ry="4.2" transform="rotate(54 3.88 5.34)"/>
+                <ellipse cx="-3.88" cy="5.34" rx="5.4" ry="4.2" transform="rotate(126 -3.88 5.34)"/>
+                <ellipse cx="-6.28" cy="-2.04" rx="5.4" ry="4.2" transform="rotate(198 -6.28 -2.04)"/>
+              </g>
+              <circle r="2.8" fill="#b8742a"/>
+            </g>
+          </g>
+        </g>
       </g>
     </g>
 
-    <!-- Luciernagas -->
+    <!-- Petalos que se desprenden del ramo (escena.js) -->
+    <g id="petalos"></g>
+
+    <!-- ========================================================
+         8. GATO DORMIDO EN EL SUELO
+         ======================================================== -->
+    <g transform="translate(698 766) scale(1.05)">
+      <ellipse cx="0" cy="19" rx="44" ry="7" fill="#000" opacity=".45" filter="url(#fSuave)"/>
+      <g fill="#0b0617">
+        <path class="gato" d="M-30 6 C -32 -10, -14 -20, 6 -20 C 24 -20, 36 -10, 36 4
+                               C 36 14, 24 18, 4 18 C -16 18, -30 16, -30 6 Z"/>
+        <ellipse cx="-27" cy="3" rx="13" ry="11"/>
+        <path d="M-37 -3 L -39 -16 L -29 -7 Z"/>
+        <path d="M-24 -8 L -19 -18 L -15 -6 Z"/>
+        <ellipse cx="-17" cy="15" rx="8" ry="4"/>
+      </g>
+      <!-- la cola le rodea el cuerpo -->
+      <path d="M34 8 C 32 22, 6 25, -12 19" fill="none" stroke="#0b0617" stroke-width="7" stroke-linecap="round"/>
+      <!-- luz de luna por el lomo y las orejas -->
+      <g fill="none" stroke="#d9c2f2" stroke-linecap="round" filter="url(#fSuave)">
+        <path d="M-8 -19 C 12 -22, 30 -15, 35 -3" stroke-width="1.8" stroke-opacity=".24"/>
+        <path d="M-21 -16 L -19 -18 L -16 -9" stroke-width="1.2" stroke-opacity=".2"/>
+      </g>
+      <!-- ojo cerrado -->
+      <path d="M-33 2 q 3 2.2 6 0" fill="none" stroke="#4a3a6e" stroke-width="1" stroke-linecap="round"/>
+    </g>
+
+    <!-- Vaho de la respiracion con el frio (escena.js) -->
+    <g id="vaho"></g>
+
+    <!-- Luciernagas (apagadas mientras nieva, ver ESCENA en escena.js) -->
     <g id="luciernagas"></g>
+
+    <!-- Nieve cercana, por delante de todo (escena.js) -->
+    <g id="nieveCerca"></g>
   </svg>
 
   <!-- ---------- MENSAJES ---------- -->
-  <div class="mensajes">
+  <div class="mensajes is-esperando">
     <p class="mensajes__texto" id="mensaje"></p>
     <div class="mensajes__avance"><span id="avance"></span></div>
+    <button type="button" class="mensajes__repetir" id="repetir" tabindex="-1">Volver a empezar</button>
   </div>
+
+  <!-- notificacion del movil (el texto esta en escena.js -> MOMENTOS) -->
+  <div class="aviso" id="aviso" aria-hidden="true">
+    <span class="aviso__app">Recordatorio</span>
+    <span class="aviso__texto" id="avisoTexto"></span>
+  </div>
+
+  <!-- ---------- PORTADA: el navegador solo deja sonar musica tras un toque ---------- -->
+  <div class="inicio" id="inicio" role="button" tabindex="0" aria-label="Empezar">
+    <p class="inicio__titulo">Día de la Flor Morada</p>
+    <p class="inicio__pista">toca para empezar</p>
+  </div>
+
+  <!-- ---------- MUSICA ---------- -->
+  <!-- Pon tu cancion en assets/audio/musica.mp3 (o cambia la ruta aqui) -->
+  <audio id="musica" src="assets/audio/musica.mp3" loop preload="auto"></audio>
+  <button type="button" class="sonido" id="sonido" aria-label="Silenciar musica" aria-pressed="false" hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M9 18V6l10-2v12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="6.5" cy="18" r="2.5" fill="currentColor"/>
+      <circle cx="16.5" cy="16" r="2.5" fill="currentColor"/>
+      <path class="sonido__tachado" d="M4 4l16 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+  </button>
 </section>
 
 <script src="assets/js/escena.js"></script>

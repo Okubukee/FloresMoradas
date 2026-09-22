@@ -37,6 +37,20 @@ body{
   display:block;
 }
 
+/* Frio: un velo azulado y algo de escarcha en las esquinas */
+.escena::before{
+  content:"";
+  position:absolute;inset:0;
+  z-index:1;
+  pointer-events:none;
+  background:
+    radial-gradient(55% 45% at 0 0,rgba(205,220,255,.13),transparent 70%),
+    radial-gradient(55% 45% at 100% 0,rgba(205,220,255,.11),transparent 70%),
+    radial-gradient(55% 45% at 0 100%,rgba(205,220,255,.10),transparent 70%),
+    radial-gradient(55% 45% at 100% 100%,rgba(205,220,255,.10),transparent 70%),
+    linear-gradient(180deg,rgba(110,140,210,.10),rgba(110,140,210,.04) 55%,rgba(150,175,235,.08));
+}
+
 /* Viñeta para enfocar el centro */
 .escena::after{
   content:"";
@@ -98,11 +112,22 @@ body{
 .parpadeo{animation:parpadeo 4s ease-in-out infinite}
 @keyframes parpadeo{0%,100%{opacity:.25}50%{opacity:1}}
 
+/* respiracion: solo hombros y cabeza, un pelo arriba y abajo.
+   La base queda escondida tras el respaldo, asi nunca lo atraviesa. */
 .respira{
-  transform-origin:center;
+  transform-box:fill-box;
+  transform-origin:50% 100%;
   animation:respira 5.5s ease-in-out infinite;
 }
-@keyframes respira{50%{transform:translateY(-3px) scaleY(1.008)}}
+@keyframes respira{50%{transform:translateY(-1.2px)}}
+
+/* el gato dormido */
+.gato{
+  transform-box:fill-box;
+  transform-origin:50% 100%;
+  animation:gato 4.2s ease-in-out infinite;
+}
+@keyframes gato{50%{transform:scaleY(1.045)}}
 
 .brisa{
   transform-origin:600px 576px;
@@ -113,22 +138,12 @@ body{
   50%{transform:rotate(1.4deg)}
 }
 
-/* un mechon de pelo que se mueve */
-.mechon{
-  transform-origin:377px 520px;
-  animation:mechon 6.5s ease-in-out infinite;
-}
-@keyframes mechon{
-  0%,100%{transform:rotate(-1.6deg)}
-  50%{transform:rotate(1.8deg)}
-}
-
 .bombilla{animation:bombilla 3.2s ease-in-out infinite}
 @keyframes bombilla{0%,100%{opacity:.7}50%{opacity:1}}
 
 /* brasa del cigarro */
 .brasa{
-  transform-origin:697px 600px;
+  transform-origin:697px 605.9px;
   animation:brasa 4.5s ease-in-out infinite;
 }
 @keyframes brasa{
@@ -151,6 +166,26 @@ body{
   100%{opacity:0;transform:translateY(-38px) scale(1.2) translateX(10px)}
 }
 
+/* nieve: el grupo cae y el copo se mece */
+.copo{animation:copo 20s linear infinite}
+@keyframes copo{
+  from{transform:translate(0,0)}
+  to{transform:translate(var(--deriva,0px),var(--caida,1300px))}
+}
+.copo__vaiven{animation:vaiven 4s ease-in-out infinite alternate}
+@keyframes vaiven{
+  from{transform:translateX(calc(var(--mece,8px) * -1))}
+  to{transform:translateX(var(--mece,8px))}
+}
+
+/* vapor de la taza */
+.vapor{
+  transform-origin:562px 586px;
+  animation:humo 6s ease-in-out infinite;
+  opacity:0;
+}
+.vapor--2{animation-duration:7.5s;animation-delay:1.8s}
+
 .luciernaga{animation:luciernaga 9s ease-in-out infinite}
 @keyframes luciernaga{
   0%,100%{opacity:0;transform:translate(0,0)}
@@ -159,8 +194,169 @@ body{
   75%{opacity:.7;transform:translate(-14px,-48px)}
 }
 
+/* ---------- Momentos ligados a los mensajes ---------- */
+.luz-silla{opacity:0;transition:opacity 2.8s ease}
+.escena__svg.silla-encendida .luz-silla{opacity:1}
+
+.movil-luz{opacity:0;transition:opacity .6s ease}
+.escena__svg.movil-encendido .movil-luz{opacity:1}
+
+/* la notificacion que sale sobre el movil */
+.aviso{
+  position:absolute;
+  z-index:3;
+  left:0;
+  top:0;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  padding:8px 14px;
+  border:1px solid rgba(207,217,255,.3);
+  border-radius:12px;
+  background:rgba(20,14,40,.72);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  box-shadow:0 0 30px rgba(207,217,255,.25);
+  color:#eef1ff;
+  font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
+  white-space:nowrap;
+  pointer-events:none;
+  opacity:0;
+  transform:translate(-50%,calc(-100% + 6px));
+  transition:opacity .6s ease, transform .6s ease;
+}
+.aviso.is-on{opacity:1;transform:translate(-50%,-100%)}
+.aviso__app{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:rgba(207,217,255,.65)}
+.aviso__texto{font-size:14px}
+
+/* gira la cabeza hacia la silla vacia */
+.cabeza{
+  transform-origin:398px 556px;
+  transition:transform 1.8s ease-in-out;
+}
+.escena__svg.mira-silla .cabeza{transform:translateX(2px) rotate(7deg)}
+.perfil{opacity:0;transition:opacity 1.2s ease}
+.escena__svg.mira-silla .perfil{opacity:1;transition-delay:.5s}
+.oreja-der{transition:opacity 1.2s ease}
+.escena__svg.mira-silla .oreja-der{opacity:0}
+
+/* el 9 del calendario brilla en el ultimo mensaje */
+.dia-marcado{transition:stroke .8s ease, stroke-width .8s ease}
+.escena__svg.dia-senalado .dia-marcado{
+  stroke:#c99bff;
+  stroke-width:1.8;
+  filter:drop-shadow(0 0 2px #c99bff);
+}
+
+/* ventanas que se apagan y la ultima que se enciende */
+.ventana{transition:opacity 2.5s ease}
+.ventana.apagada{opacity:0}
+.ventana--ultima{
+  fill:#ffd98f;
+  opacity:1;
+  transition:opacity 3s ease;
+}
+
+/* ---------- Cierre y repeticion ---------- */
+.mensajes__avance{transition:opacity 1.2s ease}
+.mensajes.is-cierre .mensajes__avance,
+.mensajes.is-esperando .mensajes__avance{opacity:0}
+.mensajes.is-cierre .mensajes__texto{font-size:clamp(28px,4.4vw,56px)}
+
+.mensajes__repetir{
+  display:block;
+  margin:22px auto 0;
+  padding:10px 26px;
+  border:1px solid rgba(217,194,242,.35);
+  border-radius:999px;
+  background:rgba(12,6,24,.45);
+  color:#f3e9ff;
+  font:italic 400 clamp(17px,1.9vw,22px)/1.2 'Cormorant Garamond',Georgia,serif;
+  letter-spacing:.02em;
+  cursor:pointer;
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transform:translateY(8px);
+  transition:opacity 1.2s ease, transform 1.2s ease, visibility 0s 1.2s, border-color .3s ease, background .3s ease;
+}
+.mensajes__repetir.is-on{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+  transform:none;
+  transition:opacity 1.2s ease, transform 1.2s ease, visibility 0s, border-color .3s ease, background .3s ease;
+}
+.mensajes__repetir:hover,
+.mensajes__repetir:focus-visible{
+  border-color:rgba(232,201,138,.7);
+  background:rgba(40,22,66,.55);
+  outline:none;
+}
+
+/* ---------- Portada ---------- */
+.inicio{
+  position:absolute;
+  inset:0;
+  z-index:5;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:0 16px;
+  text-align:center;
+  cursor:pointer;
+  background:radial-gradient(120% 90% at 50% 45%,rgba(7,3,18,.35),rgba(7,3,18,.82));
+  transition:opacity 1.6s ease, visibility 0s 1.6s;
+}
+.inicio.is-fuera{opacity:0;visibility:hidden;pointer-events:none}
+.inicio:focus-visible{outline:none}
+.inicio__titulo{
+  margin:0;
+  font-style:italic;
+  font-size:clamp(34px,5.6vw,68px);
+  color:#fdf9ff;
+  text-shadow:0 0 50px rgba(169,122,216,.55), 0 2px 18px rgba(10,4,20,.9);
+}
+.inicio__pista{
+  margin:18px 0 0;
+  font-size:clamp(14px,1.5vw,17px);
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  color:var(--violeta-200);
+  animation:pista 2.8s ease-in-out infinite;
+}
+@keyframes pista{0%,100%{opacity:.45}50%{opacity:1}}
+
+/* ---------- Boton de musica ---------- */
+.sonido{
+  position:absolute;
+  z-index:4;
+  right:16px;
+  bottom:16px;
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  padding:0;
+  border:1px solid rgba(217,194,242,.25);
+  border-radius:50%;
+  background:rgba(12,6,24,.45);
+  color:var(--violeta-200);
+  cursor:pointer;
+  opacity:.7;
+  transition:opacity .3s ease, border-color .3s ease;
+}
+.sonido[hidden]{display:none}
+.sonido:hover,.sonido:focus-visible{opacity:1;border-color:rgba(232,201,138,.6);outline:none}
+.sonido svg{width:20px;height:20px}
+.sonido__tachado{opacity:0;transition:opacity .2s ease}
+.sonido[aria-pressed="true"] .sonido__tachado{opacity:1}
+
 @media (prefers-reduced-motion:reduce){
-  .parpadeo,.respira,.brisa,.bombilla,.luciernaga,.brasa,.mechon{animation:none}
+  .parpadeo,.respira,.brisa,.bombilla,.luciernaga,.brasa,.gato,.inicio__pista,.copo,.copo__vaiven{animation:none}
+  .vapor{animation:none;opacity:.3}
   .humo{animation:none;opacity:.35}
   .mensajes__texto{transition:opacity .4s ease}
 }
