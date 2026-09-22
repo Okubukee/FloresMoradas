@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dia de la Flor Morada</title>
+<meta name="description" content="Un balcon de noche y unas palabras.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/escena.css">
+</head>
+<body>
+
+<!-- ============ ESCENA: BALCON DE NOCHE ============ -->
+<section id="terraza" class="escena">
+  <svg class="escena__svg" viewBox="0 0 1200 760" preserveAspectRatio="xMidYMid slice" role="img"
+       aria-label="El balcon de un piso de noche, con dos sillas, una mesita con un ramo de flores moradas y una silueta sentada mirando la ciudad.">
+    <defs>
+      <linearGradient id="gCielo" gradientUnits="userSpaceOnUse" x1="0" y1="-900" x2="0" y2="470">
+        <stop offset="0%"   stop-color="#03010a"/>
+        <stop offset="52%"  stop-color="#05020e"/>
+        <stop offset="66%"  stop-color="#0d0720"/>
+        <stop offset="79%"  stop-color="#1d1038"/>
+        <stop offset="90%"  stop-color="#331850"/>
+        <stop offset="97%"  stop-color="#57296b"/>
+        <stop offset="100%" stop-color="#7a3f70"/>
+      </linearGradient>
+      <radialGradient id="gLuna">
+        <stop offset="0%"   stop-color="#fff8e6" stop-opacity=".50"/>
+        <stop offset="40%"  stop-color="#e8c98a" stop-opacity=".16"/>
+        <stop offset="100%" stop-color="#e8c98a" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="gHorizonte">
+        <stop offset="0%"   stop-color="#b06ea8" stop-opacity=".42"/>
+        <stop offset="100%" stop-color="#b06ea8" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="gAbajo" gradientUnits="userSpaceOnUse" x1="0" y1="470" x2="0" y2="1100">
+        <stop offset="0%"   stop-color="#140c26"/>
+        <stop offset="45%"  stop-color="#0e0821"/>
+        <stop offset="100%" stop-color="#050310"/>
+      </linearGradient>
+      <linearGradient id="gSuelo" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%"   stop-color="#241638"/>
+        <stop offset="55%"  stop-color="#140b24"/>
+        <stop offset="100%" stop-color="#08040f"/>
+      </linearGradient>
+      <linearGradient id="gMuro" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%"   stop-color="#0a0616"/>
+        <stop offset="100%" stop-color="#1a1130"/>
+      </linearGradient>
+      <radialGradient id="gCharco">
+        <stop offset="0%"   stop-color="#a97ad8" stop-opacity=".28"/>
+        <stop offset="100%" stop-color="#a97ad8" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="gHaloFlor">
+        <stop offset="0%"   stop-color="#c79cf0" stop-opacity=".30"/>
+        <stop offset="100%" stop-color="#c79cf0" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="gSombraSuelo" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%"   stop-color="#000" stop-opacity=".55"/>
+        <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+      </linearGradient>
+      <clipPath id="cSuelo">
+        <path d="M256 580 L944 580 L1080 1400 L120 1400 Z"/>
+      </clipPath>
+      <filter id="fBrillo" x="-80%" y="-80%" width="260%" height="260%">
+        <feGaussianBlur stdDeviation="5" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="fNiebla" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur stdDeviation="16"/>
+      </filter>
+      <filter id="fSuave" x="-40%" y="-40%" width="180%" height="180%">
+        <feGaussianBlur stdDeviation="2.2"/>
+      </filter>
+    </defs>
+
+    <!-- ========================================================
+         1. CIELO
+         ======================================================== -->
+    <rect x="-700" y="-900" width="2600" height="1370" fill="url(#gCielo)"/>
+    <g id="estrellas"></g>
+
+    <!-- Luna -->
+    <circle cx="862" cy="94" r="230" fill="url(#gLuna)"/>
+    <circle cx="862" cy="94" r="54" fill="#fdf6e4" opacity=".94"/>
+    <circle cx="843" cy="80" r="10" fill="#e3d3b4" opacity=".45"/>
+    <circle cx="877" cy="111" r="13"   fill="#e3d3b4" opacity=".32"/>
+    <circle cx="852" cy="118" r="7" fill="#e3d3b4" opacity=".38"/>
+
+    <!-- Nubes finas -->
+    <g opacity=".20" filter="url(#fNiebla)">
+      <ellipse cx="300" cy="54" rx="190" ry="13" fill="#c08ada"/>
+      <ellipse cx="760" cy="296" rx="200" ry="10" fill="#c08ada"/>
+      <ellipse cx="420" cy="-46" rx="160" ry="9" fill="#c08ada"/>
+    </g>
+
+    <!-- Resplandor de la ciudad sobre el horizonte -->
+    <ellipse cx="600" cy="452" rx="1300" ry="96" fill="url(#gHorizonte)"/>
+
+    <!-- ========================================================
+         2. LA CIUDAD
+         ======================================================== -->
+    <!-- Montanas lejanas -->
+    <path d="M-700 392 L-400 330 L-180 388 L110 322 L200 376 L316 292 L414 372 L506 338 L600 392 L1200 392 L1900 392 L1900 456 L-700 456 Z"
+          fill="#3b2a5e" opacity=".42"/>
+
+    <g id="ciudadLejos"></g>
+    <ellipse cx="600" cy="442" rx="1100" ry="18" fill="#8d79bd" opacity=".16" filter="url(#fNiebla)"/>
+    <g id="ciudadMedia"></g>
+
+    <!-- La ciudad que sigue por debajo del balcon -->
+    <rect x="-700" y="466" width="2600" height="740" fill="url(#gAbajo)"/>
+    <g id="ciudadCerca"></g>
+    <g id="farolas"></g>
+
+    <!-- ========================================================
+         3. EL BALCON
+         ======================================================== -->
+    <!-- Suelo -->
+    <path d="M256 580 L944 580 L1080 1400 L120 1400 Z" fill="url(#gSuelo)"/>
+    <g clip-path="url(#cSuelo)" stroke="#d9c2f2" stroke-opacity=".05" stroke-width="1">
+      <line x1="600" y1="470" x2="60"   y2="1200"/>
+      <line x1="600" y1="470" x2="330"  y2="1200"/>
+      <line x1="600" y1="470" x2="600"  y2="1200"/>
+      <line x1="600" y1="470" x2="870"  y2="1200"/>
+      <line x1="600" y1="470" x2="1140" y2="1200"/>
+      <line x1="150" y1="648" x2="1050" y2="648"/>
+      <line x1="130" y1="726" x2="1070" y2="726"/>
+      <line x1="105" y1="820" x2="1095" y2="820"/>
+    </g>
+
+    <!-- Barandilla, solo el ancho del balcon -->
+    <g fill="#0c0617">
+      <rect x="256" y="486" width="688" height="11" rx="5"/>
+      <g id="balaustres"></g>
+      <rect x="256" y="572" width="688" height="9" rx="4"/>
+    </g>
+    <rect x="256" y="486" width="688" height="2" rx="1" fill="#d9c2f2" opacity=".14"/>
+
+    <!-- Muros laterales: el balcon es estrecho -->
+    <g>
+      <path d="M256 586 L256 392 L150 324 L150 1400 Z" fill="#150d28"/>
+      <path d="M256 586 L256 392 L150 324 L150 1400 Z" fill="url(#gMuro)" opacity=".55"/>
+      <path d="M256 392 L150 324" stroke="#d9c2f2" stroke-opacity=".22" stroke-width="3.5" fill="none"/>
+      
+      <path d="M246 586 L246 400" stroke="#d9c2f2" stroke-opacity=".07" stroke-width="2" fill="none"/>
+
+      <path d="M944 586 L944 392 L1050 324 L1050 1400 Z" fill="#150d28"/>
+      <path d="M944 586 L944 392 L1050 324 L1050 1400 Z" fill="url(#gMuro)" opacity=".38"/>
+      <path d="M944 392 L1050 324" stroke="#d9c2f2" stroke-opacity=".26" stroke-width="3.5" fill="none"/>
+      
+      <path d="M954 586 L954 400" stroke="#d9c2f2" stroke-opacity=".09" stroke-width="2" fill="none"/>
+    </g>
+
+    <!-- Postes de la barandilla contra los muros -->
+    <g fill="#0c0617">
+      <rect x="252" y="478" width="18" height="108" rx="5"/>
+      <rect x="930" y="478" width="18" height="108" rx="5"/>
+    </g>
+
+    <!-- Luz calida sobre el suelo -->
+    <ellipse cx="600" cy="712" rx="330" ry="54" fill="url(#gCharco)"/>
+
+    <!-- Guirnalda de luces, de muro a muro -->
+    <path id="guirnalda" d="M 164 334 Q 600 398 1036 334" fill="none"
+          stroke="#d9c2f2" stroke-opacity=".22" stroke-width="1.6"/>
+    <g id="bombillas"></g>
+
+    <!-- Maceta en el rincon -->
+    <g fill="#0a0517">
+      <g transform="translate(292 700) scale(.72)">
+        <path d="M-26 0 L-20 -50 L20 -50 L26 0 Z"/>
+        <rect x="-28" y="-56" width="56" height="9" rx="4"/>
+        <ellipse cx="0"   cy="-84"  rx="34" ry="26"/>
+        <ellipse cx="-20" cy="-100" rx="22" ry="19"/>
+        <ellipse cx="19"  cy="-104" rx="24" ry="20"/>
+        <ellipse cx="0"   cy="-118" rx="18" ry="16"/>
+      </g>
+    </g>
+
+    <!-- Sombras en el suelo -->
+    <g fill="url(#gSombraSuelo)">
+      <ellipse cx="398" cy="744" rx="118" ry="20"/>
+      <ellipse cx="802" cy="744" rx="118" ry="20"/>
+      <ellipse cx="600" cy="732" rx="86"  ry="16"/>
+    </g>
+
+    <!-- ========================================================
+         4. SILLA DERECHA (vacia, con una manta doblada)
+         ======================================================== -->
+    <g>
+      <g fill="#0c071c">
+        <rect x="764" y="688" width="8" height="44" rx="4"/>
+        <rect x="832" y="688" width="8" height="44" rx="4"/>
+      </g>
+      <g fill="#100926">
+        <rect x="752" y="618" width="100" height="62" rx="14"/>
+        <rect x="746" y="612" width="112" height="14" rx="7"/>
+      </g>
+      <g fill="#1a1130">
+        <rect x="770" y="634" width="7" height="40" rx="3.5"/>
+        <rect x="798" y="634" width="7" height="40" rx="3.5"/>
+        <rect x="826" y="634" width="7" height="40" rx="3.5"/>
+      </g>
+      <g fill="#100926">
+        <rect x="737" y="678" width="130" height="17" rx="8"/>
+        <rect x="742" y="692" width="11" height="58" rx="5"/>
+        <rect x="856" y="692" width="11" height="58" rx="5"/>
+      </g>
+      <rect x="746" y="612" width="112" height="2.5" rx="1.2" fill="#d9c2f2" opacity=".12"/>
+
+      <!-- la manta, doblada sobre el respaldo -->
+      <g>
+        <path d="M772 608 C 792 602, 822 602, 842 608
+                 L 845 664 C 842 674, 828 679, 810 679
+                 C 792 679, 778 674, 770 666 Z" fill="#2c1e48"/>
+        <path d="M772 608 C 792 602, 822 602, 842 608
+                 L 841 624 C 820 617, 793 617, 773 624 Z" fill="#3b2a60"/>
+        <path d="M773 612 C 793 606, 821 606, 841 612" fill="none"
+              stroke="#c0a4e4" stroke-opacity=".22" stroke-width="2"/>
+        <g stroke="#3b2a60" stroke-width="2" stroke-linecap="round" opacity=".8">
+          <path d="M776 670 L775 680"/>
+          <path d="M788 676 L787 687"/>
+          <path d="M800 678 L800 690"/>
+          <path d="M812 679 L813 691"/>
+          <path d="M824 677 L826 689"/>
+          <path d="M836 672 L839 683"/>
+        </g>
+        <path d="M790 630 C 804 626, 818 626, 830 630" fill="none"
+              stroke="#1d123a" stroke-width="2" opacity=".7"/>
+      </g>
+    </g>
+
+    <!-- ========================================================
+         5. SILLA IZQUIERDA + SILUETA
+         ======================================================== -->
+    <!-- patas traseras -->
+    <g fill="#0c071c">
+      <rect x="360" y="688" width="8" height="44" rx="4"/>
+      <rect x="428" y="688" width="8" height="44" rx="4"/>
+    </g>
+
+    <!-- la persona: se dibuja primero, el respaldo la tapa por delante -->
+    <g class="respira" transform="rotate(1.6 398 700)" fill="#06030c">
+      <!-- torso: los hombros se abren y los brazos asoman por los lados del respaldo -->
+      <path d="M318 700
+               C 318 652, 326 622, 344 606
+               C 358 592, 374 580, 390 576
+               L 408 576
+               C 424 580, 440 592, 454 606
+               C 472 622, 480 652, 480 700 Z"/>
+
+      <!-- cuello -->
+      <path d="M389 540 L409 540 C 410 554, 411 566, 413 576
+               L 385 576 C 387 566, 388 554, 389 540 Z"/>
+
+      <!-- melena: enmarca la cabeza y cae hasta los hombros -->
+      <path d="M398 474
+               C 415 474, 423 488, 422 504
+               C 426 520, 426 544, 422 562
+               C 420 571, 417 577, 412 580
+               C 417 566, 418 546, 416 532
+               C 412 543, 406 548, 398 548
+               C 390 548, 384 543, 380 532
+               C 378 546, 379 566, 384 580
+               C 379 577, 376 571, 374 562
+               C 370 544, 370 520, 374 504
+               C 373 488, 381 474, 398 474 Z"/>
+
+      <!-- cabeza -->
+      <ellipse cx="398" cy="520" rx="23" ry="25"/>
+
+      <!-- recogido -->
+      <ellipse cx="399" cy="486" rx="13" ry="11"/>
+      <path d="M385 492 C 390 499, 408 499, 413 492 C 410 497, 388 497, 385 492 Z"/>
+      <!-- mechon suelto que se mueve con el aire -->
+      <path class="mechon" d="M377 520 C 369 540, 367 562, 372 580
+                              C 369 562, 371 540, 375 524 Z"/>
+
+      <!-- brazo derecho: hombro, codo y antebrazo hasta la mesa -->
+      <path d="M452 596
+               C 470 602, 486 616, 495 629
+               C 507 636, 523 641, 536 644
+               C 545 646, 547 653, 540 655
+               C 526 656, 508 650, 493 642
+               C 477 634, 461 620, 450 606 Z"/>
+      <!-- mano apoyada en el borde de la mesa -->
+      <path d="M534 641 C 546 639, 556 643, 556 649
+               C 556 655, 547 658, 538 656
+               C 530 654, 528 645, 534 641 Z"/>
+      <ellipse cx="549" cy="652" rx="3.6" ry="2.4" fill="#0d0718"/>
+      <ellipse cx="543" cy="656" rx="3.6" ry="2.2" fill="#0d0718"/>
+
+      <!-- piernas bajo el asiento -->
+      <path d="M372 693 C 367 714, 365 733, 369 748 L 389 748
+               C 386 731, 388 712, 391 693 Z"/>
+      <path d="M409 693 C 412 714, 414 733, 410 748 L 430 748
+               C 429 731, 427 712, 425 693 Z"/>
+      <ellipse cx="374" cy="750" rx="15" ry="6"/>
+      <ellipse cx="424" cy="750" rx="15" ry="6"/>
+    </g>
+
+    <!-- luz de luna rozando la silueta -->
+    <g class="respira" transform="rotate(1.6 398 700)" fill="none"
+       stroke-linecap="round" filter="url(#fSuave)">
+      <g stroke="#efe3fb">
+        <path d="M405 476 A 13 11 0 0 1 413 488" stroke-width="2" stroke-opacity=".30"/>
+        <path d="M414 488 C 422 500, 425 514, 423 532" stroke-width="2.8" stroke-opacity=".44"/>
+        <path d="M424 540 C 426 556, 424 570, 418 581" stroke-width="2.2" stroke-opacity=".28"/>
+        <path d="M418 578 C 438 584, 452 596, 462 614" stroke-width="2.4" stroke-opacity=".30"/>
+      </g>
+      <!-- la vela le da un poco de calido al brazo -->
+      <g stroke="#f2d79b">
+        <path d="M460 604 C 476 612, 488 622, 496 631" stroke-width="2" stroke-opacity=".26"/>
+        <path d="M503 635 C 518 641, 532 645, 543 647" stroke-width="1.6" stroke-opacity=".20"/>
+      </g>
+    </g>
+
+    <!-- respaldo por delante de la persona -->
+    <g fill="#100926">
+      <rect x="348" y="618" width="100" height="62" rx="14"/>
+      <rect x="342" y="612" width="112" height="14" rx="7"/>
+    </g>
+    <g fill="#1a1130">
+      <rect x="366" y="634" width="7" height="40" rx="3.5"/>
+      <rect x="394" y="634" width="7" height="40" rx="3.5"/>
+      <rect x="422" y="634" width="7" height="40" rx="3.5"/>
+    </g>
+    <rect x="342" y="612" width="112" height="2.5" rx="1.2" fill="#d9c2f2" opacity=".12"/>
+
+    <!-- asiento y patas delanteras -->
+    <g fill="#100926">
+      <rect x="333" y="678" width="130" height="17" rx="8"/>
+      <rect x="338" y="692" width="11" height="58" rx="5"/>
+      <rect x="452" y="692" width="11" height="58" rx="5"/>
+    </g>
+
+    <!-- ========================================================
+         6. MESITA
+         ======================================================== -->
+    <g>
+      <ellipse cx="600" cy="622" rx="94" ry="22" fill="#0a0517"/>
+      <ellipse cx="600" cy="618" rx="94" ry="22" fill="#1c1134"/>
+      <ellipse cx="600" cy="618" rx="94" ry="22" fill="none" stroke="#c79cf0" stroke-opacity=".26"/>
+      <path d="M528 610 C 548 600, 596 598, 640 604" fill="none" stroke="#e0c6f7" stroke-opacity=".14" stroke-width="2.5" stroke-linecap="round"/>
+      <rect x="588" y="622" width="24" height="98" rx="8" fill="#0a0517"/>
+      <ellipse cx="600" cy="722" rx="56" ry="13" fill="#0a0517"/>
+      <ellipse cx="600" cy="722" rx="56" ry="13" fill="none" stroke="#c79cf0" stroke-opacity=".10"/>
+    </g>
+
+    <!-- Velita en vaso (lado de la silueta) -->
+    <g>
+      <ellipse cx="538" cy="606" rx="52" ry="14" fill="url(#gCharco)"/>
+      <path d="M530 606 L528 582 C 528 578, 548 578, 548 582 L546 606 Z" fill="#2a1a45" opacity=".85"/>
+      <ellipse cx="538" cy="580" rx="10" ry="3" fill="#3a2659"/>
+      <ellipse cx="538" cy="575" rx="4.5" ry="7.5" fill="#f2d79b" class="bombilla" filter="url(#fBrillo)"/>
+    </g>
+
+    <!-- Cenicero con un cigarro encendido, al lado de la silla vacia -->
+    <g>
+      <ellipse cx="668" cy="606" rx="46" ry="14" fill="url(#gCharco)"/>
+      <!-- grosor del cenicero -->
+      <path d="M644 606 L644 612 A 24 9 0 0 0 692 612 L692 606 Z" fill="#1f1436"/>
+      <!-- cuerpo y hueco -->
+      <ellipse cx="668" cy="606" rx="24" ry="9" fill="#3c2b5c"/>
+      <ellipse cx="668" cy="607" rx="17" ry="5.6" fill="#110a20"/>
+      <!-- ceniza en el fondo -->
+      <ellipse cx="662" cy="608" rx="7" ry="2.2" fill="#5d5470" opacity=".5"/>
+      <!-- brillo del borde -->
+      <ellipse cx="668" cy="606" rx="24" ry="9" fill="none" stroke="#c79cf0" stroke-opacity=".26"/>
+      <path d="M647 603 C 653 598, 683 598, 689 603" fill="none"
+            stroke="#e0cdf7" stroke-opacity=".40" stroke-width="1.6" stroke-linecap="round"/>
+
+      <!-- el cigarro, apoyado en el borde -->
+      <g transform="rotate(-13 668 606)">
+        <rect x="652" y="603.4" width="13" height="5"  rx="2.5" fill="#b98b57"/>
+        <rect x="664" y="603.4" width="30" height="5"  rx="2.2" fill="#ece5d6"/>
+        <rect x="690" y="603.4" width="6"  height="5"  rx="2.2" fill="#6b6170"/>
+        <circle cx="697" cy="605.9" r="2.7" fill="#ff7a3a" class="brasa" filter="url(#fBrillo)"/>
+      </g>
+
+      <!-- humo -->
+      <g fill="none" stroke="#e6dcf5" stroke-linecap="round" filter="url(#fSuave)">
+        <path class="humo" d="M696 594 C 702 580, 688 568, 696 554 C 703 541, 692 530, 697 518"
+              stroke-width="2.2" stroke-opacity=".30"/>
+        <path class="humo humo--2" d="M698 596 C 691 582, 704 570, 697 557 C 691 545, 701 535, 697 524"
+              stroke-width="1.6" stroke-opacity=".20"/>
+      </g>
+    </g>
+
+    <!-- ========================================================
+         7. RAMO DE FLORES MORADAS
+         ======================================================== -->
+    <g transform="translate(600 620) scale(.72) translate(-600 -620)">
+      <circle cx="600" cy="516" r="122" fill="url(#gHaloFlor)"/>
+
+      <!-- jarron -->
+      <path d="M586 620 L580 578 C 580 572, 620 572, 620 578 L614 620 Z" fill="#26153f"/>
+      <path d="M586 620 L584 600 C 596 605, 604 605, 616 600 L614 620 Z" fill="#150c26" opacity=".7"/>
+      <rect x="578" y="572" width="44" height="6" rx="3" fill="#33205a"/>
+      <path d="M580 578 C 584 596, 586 610, 586 620" fill="none" stroke="#c79cf0" stroke-opacity=".18" stroke-width="1.6"/>
+
+      <g class="brisa">
+        <!-- tallos -->
+        <g stroke="#38684a" stroke-width="3" stroke-linecap="round" fill="none" opacity=".75">
+          <path d="M600 574 C 596 550, 588 522, 580 498"/>
+          <path d="M600 574 C 606 550, 616 524, 626 504"/>
+          <path d="M600 574 C 592 554, 580 534, 562 520"/>
+          <path d="M600 574 C 610 554, 626 538, 642 528"/>
+          <path d="M600 574 C 600 546, 601 512, 601 482"/>
+          <path d="M600 574 C 590 558, 572 548, 554 546"/>
+          <path d="M600 574 C 612 558, 630 550, 648 550"/>
+          <path d="M600 574 C 594 552, 590 528, 592 504"/>
+          <path d="M600 574 C 608 552, 614 532, 616 514"/>
+        </g>
+        <!-- hojas -->
+        <g fill="#38684a" opacity=".55">
+          <path d="M590 546 C 576 538, 566 542, 564 552 C 576 556, 586 554, 590 546 Z"/>
+          <path d="M612 556 C 626 546, 638 550, 640 560 C 628 564, 617 562, 612 556 Z"/>
+          <path d="M596 518 C 586 508, 576 508, 572 514 C 580 522, 590 524, 596 518 Z"/>
+        </g>
+        <!-- flores (las dibuja escena.js) -->
+        <g id="flores"></g>
+      </g>
+    </g>
+
+    <!-- Luciernagas -->
+    <g id="luciernagas"></g>
+  </svg>
+
+  <!-- ---------- MENSAJES ---------- -->
+  <div class="mensajes">
+    <p class="mensajes__texto" id="mensaje"></p>
+    <div class="mensajes__avance"><span id="avance"></span></div>
+  </div>
+</section>
+
+<script src="assets/js/escena.js"></script>
+</body>
+</html>
