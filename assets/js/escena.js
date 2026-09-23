@@ -37,13 +37,23 @@ const ESCENA = {
   cadaFugaz: [4000, 11000],
   cadaPetalo: [5000, 12000],
   cadaBrasa: [9000, 20000],
+  // Guiños a Crepusculo
+  pinos: true,          // bosque de pinos en el horizonte, como en Forks
+  niebla: true,         // niebla que cruza la ciudad
+  prado: 90,            // flores que brotan en el suelo al final (0 = ninguna)
 };
 
 // Lo que aparece al terminar los mensajes.
 const CIERRE = {
   texto: 'Feliz día de la flor morada.',
   pausaAntes: 1800,     // ms tras el ultimo mensaje
-  esperaBoton: 3600,    // ms hasta que aparece "Volver a empezar"
+  esperaBoton: 3600,    // ms hasta que aparecen los botones del final
+  // boton que abre un video en otra pestaña (deja enlaceVideo en '' para quitarlo)
+  textoVideo: 'Cómo conservar tu ramo',
+  enlaceVideo: 'https://www.youtube.com/shorts/dXnECzPj0GQ',
+  // boton que abre la floristeria en otra pestaña (deja enlaceFloristeria en '' para quitarlo)
+  textoFloristeria: 'Ver la floristería',
+  enlaceFloristeria: 'https://maps.app.goo.gl/HVmx4EXgC9hLbsZK8',
 };
 
 // Cosas que pasan en la escena con ciertos mensajes. Se busca el trozo de
@@ -54,6 +64,22 @@ const MOMENTOS = {
   sillaVacia: 'ser la luz',          // se ilumina la silla de la manta
   movil: 'floristeria',              // el movil se enciende con un aviso
   avisoMovil: '9 de noviembre 🌸',
+  mesesPasan: 'el tiempo y el espacio', // el calendario pasa un año entero (Luna Nueva)
+  petaloTulipan: 'no te presionare',    // cae un petalo del tulipan (Luna Nueva)
+};
+
+// La carta que se abre al tocar la nota bajo el jarron (sale en el ultimo
+// mensaje) o con el boton "Leer la carta" del final.
+// Cada texto de "parrafos" es un parrafo. Deja "epigrafe" vacio ('') para quitarlo.
+const CARTA = {
+  epigrafe: '«Antes de ti, mi vida era como una noche sin luna. Muy oscura, pero había estrellas, puntos de luz y razón… Y entonces cruzaste mi cielo como una estrella fugaz.»',
+  titulo: 'Para ti Estela',
+  parrafos: [
+    'Hola, quiero decirte que estoy disfrutando mucho dedicarte cosas asi. No esperaba divertirme haciendote cosas originales y imaginarme quizas una sonrisa invisible que no pueda ver.',
+    'Esta vez quise ser mas detallista, no se si quizas te fijaste. Pero hay algunos detalles interesantes ademas de referencias a Crepusculo ¿Quien diria que esto fuera divertido? Aparte resulta que si haces las cosas con mucho tiempo de antelacion, es mucho mas comodo hacer estas cosas.',
+    'Aparte de eso tambien queria decirte algunas cosas sobre ti. Siempre me pareciste hermosa, admiro tu caracter, tu voz, extraño tu acento en otros idiomas, tu sonrisa, tu estilo, tus ocurrencias, tu risa, tu mirada, tu preocupacion, eres inteligente, detallista, dulce, buena, quizas puedas decir que no eres perfecta. Pero que importa pensar en eso, cuando existes tu.',
+  ],
+  firma: 'Con cariño,',
 };
 
 // La cancion se pone en index.html -> <audio id="musica">.
@@ -63,7 +89,8 @@ const MUSICA = {
 };
 
 // Zona que siempre debe verse, pase lo que pase con el tamano de pantalla.
-const ENCUADRE = { x: 200, y: -60, ancho: 800, alto: 870 };
+// De ancho entra desde el calendario del muro izquierdo hasta la manzana de la barandilla.
+const ENCUADRE = { x: 210, y: -60, ancho: 780, alto: 870 };
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const svg = document.querySelector('.escena__svg');
@@ -97,8 +124,10 @@ const ajustarEncuadre = () => {
     alto = ENCUADRE.alto;
     ancho = Math.min(2500, alto * r);
   } else {
+    // en movil (vertical) sobra alto: se enseña mas cielo y suelo para que
+    // quepa todo el ancho y no se corten el calendario ni el tulipan
     ancho = ENCUADRE.ancho;
-    alto = Math.min(1400, ancho / r);
+    alto = Math.min(1950, ancho / r);
   }
 
   const x = 600 - ancho / 2;                       // centrado en la mesa
@@ -114,6 +143,21 @@ const ajustarEncuadre = () => {
     const arriba = (ANCLA_MENSAJES - y) * escala - desviacion;
     elMensajes.style.top = `${Math.round(arriba)}px`;
     elMensajes.style.width = `${Math.round(Math.min(660 * escala, window.innerWidth * 0.86))}px`;
+
+    // en movil los botones del final se apilan: se bajan al suelo vacio, bajo
+    // el gato, para no tapar la mesa
+    const elBotones = elMensajes.querySelector('.mensajes__botones');
+    if (elBotones) {
+      if (r <= proporcionSegura) {
+        const suelo = (820 - y) * escala - desviacion;
+        Object.assign(elBotones.style, {
+          position: 'absolute', left: '0', right: '0', marginTop: '0',
+          top: `${Math.round(suelo - arriba)}px`,
+        });
+      } else {
+        elBotones.removeAttribute('style');
+      }
+    }
   }
 };
 
@@ -250,6 +294,80 @@ CAPAS.forEach((capa) => {
   }
 });
 
+/* ---------- Pinos de Forks en el horizonte ---------- */
+
+// Un abeto: copa en pisos que se abren hacia abajo y un tronco corto.
+const pino = (x, base, alto) => {
+  const ancho = alto * azar(0.32, 0.42);
+  const top = base - alto;
+  const copa = alto * 0.88;
+  const pisos = 4;
+  const lado = [];
+  for (let i = 1; i <= pisos; i++) {
+    const t = i / pisos;
+    const y = top + copa * t;
+    lado.push([(ancho / 2) * t, y]);
+    if (i < pisos) lado.push([(ancho / 2) * t * 0.45, y - alto * 0.02]);
+  }
+  const tronco = ancho * 0.06;
+  const derecha = [...lado, [tronco, top + copa], [tronco, base]];
+  const puntos = [[0, top], ...derecha, ...[...derecha].reverse().map(([dx, y]) => [-dx, y])];
+  return crear('path', {
+    d: `M${puntos.map(([dx, y]) => `${(x + dx).toFixed(1)} ${y.toFixed(1)}`).join(' L')} Z`,
+  });
+};
+
+const plantarPinos = (id, { base, alto, color, zonas, cuantos }) => {
+  const grupo = document.getElementById(id);
+  if (!grupo || !ESCENA.pinos) return;
+  grupo.setAttribute('fill', color);
+  for (let i = 0; i < cuantos; i++) {
+    const [desde, hasta] = zonas[Math.floor(Math.random() * zonas.length)];
+    grupo.appendChild(pino(azar(desde, hasta), base + azar(0, 4), azar(alto[0], alto[1])));
+  }
+};
+
+// al fondo por todo el horizonte; los cercanos, mas altos, hacia los lados
+plantarPinos('pinosLejos', {
+  base: 450, alto: [22, 58], color: '#23173f', cuantos: 150,
+  zonas: [[-700, 440], [760, 1900], [440, 760]],
+});
+plantarPinos('pinosCerca', {
+  base: 468, alto: [44, 104], color: '#150d29', cuantos: 60,
+  zonas: [[-700, 380], [820, 1900]],
+});
+
+/* ---------- Niebla ---------- */
+const echarNiebla = (id, bandas) => {
+  const grupo = document.getElementById(id);
+  if (!grupo || !ESCENA.niebla) return;
+  bandas.forEach(({ y, alto, opacidad, cuantas }) => {
+    for (let i = 0; i < cuantas; i++) {
+      const nube = crear('ellipse', {
+        cx: azar(-700, 1900).toFixed(0),
+        cy: (y + azar(-8, 8)).toFixed(0),
+        rx: azar(220, 420).toFixed(0),
+        ry: (alto * azar(0.7, 1.2)).toFixed(0),
+        fill: 'url(#gNiebla)',
+        opacity: azar(opacidad * 0.6, opacidad).toFixed(2),
+      });
+      if (!reducido) {
+        nube.setAttribute('class', 'niebla');
+        nube.style.setProperty('--viaje', `${(azar(80, 220) * (Math.random() < 0.5 ? -1 : 1)).toFixed(0)}px`);
+        nube.style.animationDuration = `${azar(40, 80).toFixed(0)}s`;
+        nube.style.animationDelay = `${(-azar(0, 80)).toFixed(0)}s`;
+      }
+      grupo.appendChild(nube);
+    }
+  });
+};
+
+echarNiebla('nieblaLejos', [
+  { y: 452, alto: 26, opacidad: 0.6, cuantas: 9 },
+  { y: 420, alto: 18, opacidad: 0.3, cuantas: 5 },
+]);
+echarNiebla('nieblaCerca', [{ y: 530, alto: 40, opacidad: 0.4, cuantas: 7 }]);
+
 /* ---------- Farolas de la calle, alla abajo ---------- */
 const gFarolas = document.getElementById('farolas');
 if (gFarolas) {
@@ -275,21 +393,105 @@ if (gBalaustres) {
 }
 
 /* ---------- Calendario: noviembre, con el dia 9 marcado ---------- */
+const DIA_MARCADO = { anio: 2026, mes: 10, dia: 9 }; // mes: 0 = enero
+const NOMBRES_MES = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'];
+const hojaCalendario = document.getElementById('hojaCalendario');
+const elMes = document.getElementById('mesCalendario');
 const gDias = document.getElementById('diasCalendario');
 const diaMarcado = document.querySelector('.dia-marcado');
-if (gDias) {
-  const anio = 2026;
-  const hueco = (new Date(anio, 10, 1).getDay() + 6) % 7; // semanas empezando en lunes
-  for (let d = 1; d <= 30; d++) {
+
+const dibujarMes = (anio, mes) => {
+  if (!gDias) return;
+  gDias.replaceChildren();
+  if (elMes) elMes.textContent = NOMBRES_MES[mes];
+  const conMarca = mes === DIA_MARCADO.mes;
+  if (diaMarcado) diaMarcado.style.visibility = conMarca ? 'visible' : 'hidden';
+  const hueco = (new Date(anio, mes, 1).getDay() + 6) % 7; // semanas empezando en lunes
+  const dias = new Date(anio, mes + 1, 0).getDate();
+  for (let d = 1; d <= dias; d++) {
     const pos = d - 1 + hueco;
     const x = 5 + (pos % 7) * 5.7;
     const y = 16 + Math.floor(pos / 7) * 5.6;
     gDias.appendChild(crear('rect', { x: x - 1.4, y: y - 0.9, width: 2.8, height: 1.8, rx: 0.4 }));
-    if (d === 9 && diaMarcado) {
+    if (conMarca && d === DIA_MARCADO.dia && diaMarcado) {
       diaMarcado.setAttribute('cx', x);
       diaMarcado.setAttribute('cy', y);
     }
   }
+};
+const volverANoviembre = () => dibujarMes(DIA_MARCADO.anio, DIA_MARCADO.mes);
+volverANoviembre();
+
+// Pasa un año entero, hoja a hoja, como en Luna Nueva, y vuelve a noviembre.
+// Cada hoja arrancada es una copia que sale volando; debajo ya esta el mes siguiente.
+let hojeando = 0;
+const pasarMeses = async () => {
+  if (!hojaCalendario || reducido) return;
+  const vez = ++hojeando;
+  await esperar(1200);
+  for (let i = 1; i <= 12; i++) {
+    if (vez !== hojeando) return;
+    const hoja = hojaCalendario.cloneNode(true);
+    hoja.removeAttribute('id');
+    hoja.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
+    hojaCalendario.after(hoja);
+
+    if (i === 12) volverANoviembre();
+    else {
+      const fecha = new Date(DIA_MARCADO.anio, DIA_MARCADO.mes + i, 1);
+      dibujarMes(fecha.getFullYear(), fecha.getMonth());
+    }
+
+    hoja.style.transformBox = 'fill-box';
+    hoja.style.transformOrigin = '50% 0';
+    hoja.animate([
+      { transform: 'translate(0, 0) rotate(0deg) scaleY(1)', opacity: 1 },
+      { transform: 'translate(4px, -8px) rotate(-8deg) scaleY(.4)', opacity: 0.85, offset: 0.45 },
+      { transform: 'translate(16px, 10px) rotate(-24deg) scaleY(.1)', opacity: 0 },
+    ], { duration: 900, easing: 'ease-in', fill: 'forwards' }).onfinish = () => hoja.remove();
+    await esperar(600);
+  }
+};
+const pararMeses = () => {
+  hojeando++;
+  volverANoviembre();
+};
+
+/* ---------- Tablero de ajedrez sobre la silla vacia ---------- */
+const gTablero = document.getElementById('tablero');
+if (gTablero) {
+  // esquinas del tablero en perspectiva: fondo izq, fondo der, frente der, frente izq
+  const [fi, fd, dd, di] = [[756, 671], [806, 671], [812, 678], [750, 678]];
+  const punto = (u, v) => {
+    const arriba = [fi[0] + (fd[0] - fi[0]) * u, fi[1]];
+    const abajo = [di[0] + (dd[0] - di[0]) * u, di[1]];
+    return [arriba[0] + (abajo[0] - arriba[0]) * v, arriba[1] + (abajo[1] - arriba[1]) * v];
+  };
+  const filas = 4;
+  const columnas = 8;
+  for (let f = 0; f < filas; f++) {
+    for (let c = 0; c < columnas; c++) {
+      if ((f + c) % 2) continue;
+      const esquinas = [
+        punto(c / columnas, f / filas), punto((c + 1) / columnas, f / filas),
+        punto((c + 1) / columnas, (f + 1) / filas), punto(c / columnas, (f + 1) / filas),
+      ];
+      gTablero.appendChild(crear('path', {
+        d: `M${esquinas.map(([x, y]) => `${x.toFixed(2)} ${y.toFixed(2)}`).join(' L')} Z`,
+        fill: '#c9bfae', opacity: 0.55,
+      }));
+    }
+  }
+}
+
+/* ---------- La manzana brilla al tocarla ---------- */
+const manzana = document.getElementById('manzana');
+const brilloManzana = document.getElementById('brilloManzana');
+if (manzana && brilloManzana) {
+  manzana.addEventListener('click', () => {
+    brilloManzana.animate([{ opacity: 0 }, { opacity: 1, offset: 0.3 }, { opacity: 0 }],
+      { duration: 2400, easing: 'ease-in-out' });
+  });
 }
 
 /* ---------- Guirnalda de bombillas ---------- */
@@ -535,6 +737,112 @@ const soltarPetalo = () => {
   };
 };
 
+/* ---------- El petalo del tulipan (Luna Nueva) ---------- */
+// Cae despacio hasta el suelo y se queda alli hasta volver a empezar.
+const petaloTulipan = document.getElementById('petaloTulipan');
+let petaloCaido = null;
+let animacionTulipan = null;
+
+const caerPetaloTulipan = async () => {
+  if (!petaloTulipan || !gPetalos || reducido || petaloCaido) return;
+  const [x, y] = [294.5, 564]; // el petalo derecho del tulipan de la botella
+  const [dx, dy] = [316 - x, 678 - y]; // al suelo, junto a la botella
+  petaloCaido = crear('g', { transform: `translate(${x.toFixed(1)} ${y.toFixed(1)})` });
+  const petalo = crear('path', {
+    d: 'M0 -8 C 3 -6, 4 -1, 3 4 C 2 7, -2 7, -3 4 C -4 -1, -3 -6, 0 -8 Z',
+    fill: 'url(#gTulipan)',
+  });
+  petaloCaido.appendChild(petalo);
+  gPetalos.appendChild(petaloCaido);
+
+  animacionTulipan = petaloTulipan.animate([{ opacity: 1 }, { opacity: 0 }],
+    { duration: 300, fill: 'forwards' });
+
+  const pasos = 12;
+  const fotogramas = [];
+  for (let k = 0; k <= pasos; k++) {
+    const t = k / pasos;
+    const px = dx * t + Math.sin(t * Math.PI * 3) * 22 * (1 - t * 0.7);
+    const py = dy * t ** 1.3;
+    const aleteo = 0.7 + 0.3 * Math.abs(Math.cos(t * 6));
+    fotogramas.push({
+      transform: `translate(${px.toFixed(1)}px, ${py.toFixed(1)}px) rotate(${(20 + 70 * t + Math.sin(t * 9) * 25).toFixed(0)}deg) scaleY(${aleteo.toFixed(2)})`,
+    });
+  }
+  // al llegar al suelo se queda tumbado
+  fotogramas[pasos].transform = `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px) rotate(80deg) scaleY(.55)`;
+  petalo.animate(fotogramas, { duration: 8000, easing: 'ease-in-out', fill: 'forwards' });
+};
+
+const devolverPetaloTulipan = () => {
+  if (animacionTulipan) animacionTulipan.cancel();
+  animacionTulipan = null;
+  if (petaloCaido) petaloCaido.remove();
+  petaloCaido = null;
+};
+
+/* ---------- El prado del final ---------- */
+// Flores moradas silvestres que brotan por todo el suelo del balcon.
+const gPrado = document.getElementById('prado');
+const gPradoDelante = document.getElementById('pradoDelante');
+
+// bordes del suelo (el trapecio del balcon) a una altura dada
+const anchoDelSuelo = (y) => {
+  const t = (y - 580) / 820;
+  return [256 - 136 * t, 944 + 136 * t];
+};
+
+const florecerPrado = () => {
+  if (!gPrado || !gPradoDelante || !ESCENA.prado) return;
+  for (let i = 0; i < ESCENA.prado; i++) {
+    const y = azar(598, 900);
+    const [izq, der] = anchoDelSuelo(y);
+    const x = azar(izq + 8, der - 8);
+    const delante = y > 736;
+    if (delante && x > 646 && x < 750 && y < 794) continue; // ahi duerme el gato
+
+    const escala = 0.45 + (y - 590) / 260; // mas pequeñas cuanto mas lejos
+    const flor = crear('g', { transform: `translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${escala.toFixed(2)})` });
+    const alto = azar(8, 16);
+    const tallo = crear('path', {
+      d: `M0 0 Q ${azar(-3, 3).toFixed(1)} ${(-alto / 2).toFixed(1)}, 0 ${(-alto).toFixed(1)}`,
+      stroke: '#38684a', 'stroke-width': 1.3, 'stroke-linecap': 'round', fill: 'none', opacity: 0.8,
+      pathLength: 1, 'stroke-dasharray': 1,
+    });
+    const sitio = crear('g', { transform: `translate(0 ${(-alto).toFixed(1)})` });
+    const corola = crear('g');
+    const color = TONOS_FLOR[Math.floor(Math.random() * TONOS_FLOR.length)];
+    corola.appendChild(crear('circle', { r: 7, fill: 'url(#gHaloFlor)' }));
+    for (let p = 0; p < 5; p++) {
+      const ang = (p / 5) * Math.PI * 2 - Math.PI / 2;
+      corola.appendChild(crear('circle', {
+        cx: (Math.cos(ang) * 2.3).toFixed(2), cy: (Math.sin(ang) * 2.3).toFixed(2), r: 1.9, fill: color,
+      }));
+    }
+    corola.appendChild(crear('circle', { r: 1, fill: '#edd9a6' }));
+    sitio.appendChild(corola);
+    flor.append(tallo, sitio);
+    (delante ? gPradoDelante : gPrado).appendChild(flor);
+
+    if (reducido) continue;
+    const retraso = azar(0, 4500);
+    tallo.animate([{ strokeDashoffset: '1' }, { strokeDashoffset: '0' }],
+      { duration: 1000, delay: retraso, easing: 'ease-out', fill: 'both' });
+    corola.style.transformBox = 'fill-box';
+    corola.style.transformOrigin = 'center';
+    corola.animate([
+      { transform: 'scale(0) rotate(-40deg)' },
+      { transform: 'scale(1.2) rotate(6deg)', offset: 0.7 },
+      { transform: 'scale(1) rotate(0deg)' },
+    ], { duration: 1200, delay: retraso + 700, easing: 'ease-out', fill: 'both' });
+  }
+};
+
+const marchitarPrado = () => {
+  if (gPrado) gPrado.replaceChildren();
+  if (gPradoDelante) gPradoDelante.replaceChildren();
+};
+
 /* ---------- La brasa se aviva con el aire ---------- */
 const brasaHalo = document.getElementById('brasaHalo');
 const brasaLuz = document.getElementById('brasaLuz');
@@ -666,6 +974,9 @@ const cierre = async () => {
   elMensajes.classList.add('is-cierre');
   await esperar(CIERRE.pausaAntes);
 
+  // el suelo se llena de flores moradas, como el prado
+  florecerPrado();
+
   // lluvia de estrellas fugaces y unos cuantos petalos
   for (let i = 0; i < 7; i++) setTimeout(() => estrellaFugaz(), i * azar(350, 650));
   for (let i = 0; i < 4; i++) setTimeout(soltarPetalo, 400 + i * 700);
@@ -681,10 +992,11 @@ const cierre = async () => {
   elMensaje.classList.add('is-on');
   await esperar(CIERRE.esperaBoton);
 
-  if (elRepetir) {
-    elRepetir.classList.add('is-on');
-    elRepetir.tabIndex = 0;
-  }
+  [elLeerCarta, elVerVideo, elVerFloristeria, elRepetir].forEach((boton) => {
+    if (!boton) return;
+    boton.classList.add('is-on');
+    boton.tabIndex = 0;
+  });
 };
 
 /* ---------- Momentos ligados a los mensajes ---------- */
@@ -758,8 +1070,15 @@ const encenderMovil = async () => {
 /* la nota bajo el jarron sale del todo en el ultimo mensaje */
 const elNota = document.getElementById('nota');
 let animacionNota = null;
+// mientras no se ve, la nota no se puede tocar
+const notaTocable = (si) => {
+  if (!elNota) return;
+  elNota.classList.toggle('is-tocable', si);
+  elNota.tabIndex = si ? 0 : -1;
+};
 const mostrarNota = () => {
   if (!elNota) return;
+  notaTocable(true);
   if (reducido) {
     elNota.setAttribute('opacity', '1');
     return;
@@ -772,8 +1091,88 @@ const mostrarNota = () => {
 const esconderNota = () => {
   if (animacionNota) animacionNota.cancel();
   animacionNota = null;
+  notaTocable(false);
   if (elNota) elNota.setAttribute('opacity', '0');
 };
+
+/* ---------- La carta ---------- */
+const elCarta = document.getElementById('carta');
+const elCartaPapel = document.getElementById('cartaPapel');
+const elCartaCerrar = document.getElementById('cartaCerrar');
+const elLeerCarta = document.getElementById('leerCarta');
+
+// botones-enlace del final (video, floristeria); sin enlace, no se muestran
+const prepararEnlace = (id, enlace, texto) => {
+  const el = document.getElementById(id);
+  if (!el) return null;
+  if (!enlace) {
+    el.remove();
+    return null;
+  }
+  el.href = enlace;
+  el.querySelector('.mensajes__etiqueta').textContent = texto;
+  return el;
+};
+const elVerVideo = prepararEnlace('verVideo', CIERRE.enlaceVideo, CIERRE.textoVideo);
+const elVerFloristeria = prepararEnlace('verFloristeria', CIERRE.enlaceFloristeria, CIERRE.textoFloristeria);
+
+if (elCarta) {
+  const epigrafe = document.getElementById('cartaEpigrafe');
+  epigrafe.textContent = CARTA.epigrafe;
+  epigrafe.hidden = !CARTA.epigrafe;
+  document.getElementById('cartaTitulo').textContent = CARTA.titulo;
+  document.getElementById('cartaFirma').textContent = CARTA.firma;
+  document.getElementById('cartaCuerpo').replaceChildren(...CARTA.parrafos.map((texto) => {
+    const p = document.createElement('p');
+    p.textContent = texto;
+    return p;
+  }));
+}
+
+let focoAntesDeLaCarta = null;
+let cerrandoCarta = null;
+const abrirCarta = () => {
+  if (!elCarta) return;
+  clearTimeout(cerrandoCarta);
+  focoAntesDeLaCarta = document.activeElement;
+  elCarta.hidden = false;
+  elCartaPapel.scrollTop = 0;
+  void elCarta.offsetWidth; // para que la transicion arranque desde oculta
+  elCarta.classList.add('is-on');
+  elCartaCerrar.focus({ preventScroll: true });
+};
+const cerrarCarta = () => {
+  if (!elCarta || elCarta.hidden) return;
+  elCarta.classList.remove('is-on');
+  cerrandoCarta = setTimeout(() => { elCarta.hidden = true; }, reducido ? 0 : 700);
+  if (focoAntesDeLaCarta && focoAntesDeLaCarta.focus) focoAntesDeLaCarta.focus({ preventScroll: true });
+};
+
+if (elCarta) {
+  elCartaCerrar.addEventListener('click', cerrarCarta);
+  // tocar fuera del papel tambien la cierra
+  elCarta.addEventListener('click', (e) => { if (e.target === elCarta) cerrarCarta(); });
+  document.addEventListener('keydown', (e) => {
+    if (elCarta.hidden) return;
+    if (e.key === 'Escape') cerrarCarta();
+    // con el tabulador el foco se queda dentro de la carta: el papel (para
+    // bajar con las flechas) y el boton de cerrar
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      (document.activeElement === elCartaCerrar ? elCartaPapel : elCartaCerrar).focus({ preventScroll: true });
+    }
+  });
+}
+if (elNota) {
+  elNota.addEventListener('click', () => { if (elNota.classList.contains('is-tocable')) abrirCarta(); });
+  elNota.addEventListener('keydown', (e) => {
+    if ((e.key === 'Enter' || e.key === ' ') && elNota.classList.contains('is-tocable')) {
+      e.preventDefault();
+      abrirCarta();
+    }
+  });
+}
+if (elLeerCarta) elLeerCarta.addEventListener('click', abrirCarta);
 
 /* las ventanas de la ciudad se apagan poco a poco segun avanzan los mensajes */
 const ventanasEnOrden = [...VENTANAS].sort(() => Math.random() - 0.5);
@@ -810,6 +1209,8 @@ const encenderUltimaVentana = () => {
 let temporizadorMirada = null;
 const momentoDe = (texto) => {
   if (trae(texto, MOMENTOS.florAmarilla)) brotarFlorAmarilla();
+  if (trae(texto, MOMENTOS.mesesPasan)) pasarMeses();
+  if (trae(texto, MOMENTOS.petaloTulipan)) setTimeout(caerPetaloTulipan, 600);
   if (trae(texto, MOMENTOS.movil)) {
     encenderMovil();
     mostrarNota();
@@ -832,6 +1233,9 @@ const recorrido = async () => {
   esconderFlorAmarilla();
   esconderNota();
   encenderCiudad();
+  pararMeses();
+  devolverPetaloTulipan();
+  marchitarPrado();
   svg.classList.remove('dia-senalado');
   for (let i = 0; i < MENSAJES.length; i++) {
     const texto = MENSAJES[i];
@@ -853,8 +1257,11 @@ if (elRepetir) {
   elRepetir.addEventListener('click', async () => {
     if (repitiendo) return;
     repitiendo = true;
-    elRepetir.classList.remove('is-on');
-    elRepetir.tabIndex = -1;
+    [elLeerCarta, elVerVideo, elVerFloristeria, elRepetir].forEach((boton) => {
+      if (!boton) return;
+      boton.classList.remove('is-on');
+      boton.tabIndex = -1;
+    });
     elMensaje.classList.remove('is-on');
     if (elBarra) elBarra.style.width = '0%';
     await esperar(1600);

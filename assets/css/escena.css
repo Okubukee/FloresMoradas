@@ -194,6 +194,16 @@ body{
   75%{opacity:.7;transform:translate(-14px,-48px)}
 }
 
+/* ---------- Guiños a Crepusculo ---------- */
+/* la niebla de Forks va y viene despacio */
+.niebla{animation:niebla 60s ease-in-out infinite alternate}
+@keyframes niebla{to{transform:translateX(var(--viaje,120px))}}
+
+/* la manzana brilla al pasar por encima (y al tocarla, ver escena.js) */
+.manzana{cursor:pointer}
+.manzana__brillo{opacity:0;transition:opacity .8s ease}
+.manzana:hover .manzana__brillo{opacity:1}
+
 /* ---------- Momentos ligados a los mensajes ---------- */
 .luz-silla{opacity:0;transition:opacity 2.8s ease}
 .escena__svg.silla-encendida .luz-silla{opacity:1}
@@ -263,10 +273,31 @@ body{
 .mensajes.is-esperando .mensajes__avance{opacity:0}
 .mensajes.is-cierre .mensajes__texto{font-size:clamp(28px,4.4vw,56px)}
 
+/* carta arriba, los dos enlaces lado a lado y "volver a empezar" discreto abajo */
+.mensajes__botones{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  width:min(100%,500px);
+  margin:26px auto 0;
+}
+.mensajes__repetir--principal,
+.mensajes__repetir--discreto,
+.mensajes__repetir--enlace:only-of-type{grid-column:1 / -1}
+@media (max-width:460px){
+  .mensajes__botones{grid-template-columns:minmax(0,1fr);gap:10px}
+}
+
 .mensajes__repetir{
-  display:block;
-  margin:22px auto 0;
-  padding:10px 26px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  min-width:0;
+  margin:0;
+  text-decoration:none;
+  text-align:center;
+  padding:11px 20px;
   border:1px solid rgba(217,194,242,.35);
   border-radius:999px;
   background:rgba(12,6,24,.45);
@@ -292,6 +323,198 @@ body{
   border-color:rgba(232,201,138,.7);
   background:rgba(40,22,66,.55);
   outline:none;
+}
+.mensajes__repetir svg{
+  flex:none;
+  width:1.05em;
+  height:1.05em;
+  opacity:.8;
+}
+
+/* la carta es lo principal: dorado suave y un poco mas grande */
+.mensajes__repetir--principal{
+  padding:14px 24px;
+  border-color:rgba(232,201,138,.6);
+  background:linear-gradient(180deg,rgba(92,52,130,.55),rgba(46,22,74,.6));
+  box-shadow:0 0 28px rgba(201,155,255,.22);
+  color:#fff4dc;
+  font-size:clamp(20px,2.2vw,26px);
+}
+.mensajes__repetir--principal:hover,
+.mensajes__repetir--principal:focus-visible{
+  border-color:rgba(232,201,138,.95);
+  background:linear-gradient(180deg,rgba(112,64,156,.6),rgba(58,28,92,.65));
+  box-shadow:0 0 36px rgba(232,201,138,.3);
+}
+
+/* volver a empezar: solo texto, sin marco */
+.mensajes__repetir--discreto{
+  justify-self:center;
+  margin-top:4px;
+  padding:6px 14px;
+  border-color:transparent;
+  background:none;
+  color:rgba(243,233,255,.6);
+  font-size:clamp(15px,1.6vw,18px);
+}
+.mensajes__repetir--discreto:hover,
+.mensajes__repetir--discreto:focus-visible{
+  border-color:transparent;
+  background:none;
+  color:#f3e9ff;
+}
+
+/* aparecen uno detras de otro */
+.mensajes__repetir.is-on:nth-child(2){transition-delay:.25s}
+.mensajes__repetir.is-on:nth-child(3){transition-delay:.4s}
+.mensajes__repetir.is-on:nth-child(4){transition-delay:.9s}
+.mensajes__repetir.is-on:hover,
+.mensajes__repetir.is-on:focus-visible{transition-delay:0s}
+
+/* ---------- La nota bajo el jarron ---------- */
+.nota{pointer-events:none}
+.nota.is-tocable{pointer-events:auto;cursor:pointer}
+.nota:focus{outline:none}
+/* un latido de luz para invitar a tocarla */
+.nota.is-tocable .nota__halo{animation:pista 2.8s ease-in-out infinite}
+.nota:focus-visible .nota__halo{animation:none;opacity:1}
+
+/* ---------- La carta ---------- */
+.carta{
+  position:absolute;
+  inset:0;
+  z-index:6;
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  place-items:center;
+  padding:24px 16px;
+  background:radial-gradient(120% 90% at 50% 45%,rgba(20,4,12,.55),rgba(5,2,10,.88));
+  -webkit-backdrop-filter:blur(3px);
+  backdrop-filter:blur(3px);
+  opacity:0;
+  transition:opacity .7s ease;
+}
+.carta[hidden]{display:none}
+.carta.is-on{opacity:1}
+
+/* papel envejecido, con el pliegue en medio y los bordes tostados */
+.carta__papel{
+  position:relative;
+  width:min(580px,100%);
+  max-height:calc(100svh - 48px);
+  overflow:auto;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(110,15,34,.4) transparent;
+  padding:104px clamp(24px,7vw,64px) 40px;
+  border-radius:2px;
+  color:#33262c;
+  background:
+    linear-gradient(180deg,transparent 33.1%,rgba(120,90,70,.10) 33.3%,rgba(255,255,255,.35) 33.5%,transparent 34%),
+    linear-gradient(180deg,transparent 66.3%,rgba(120,90,70,.10) 66.5%,rgba(255,255,255,.35) 66.7%,transparent 67.2%),
+    radial-gradient(120% 70% at 50% 0%,rgba(255,255,255,.45),transparent 60%),
+    radial-gradient(140% 120% at 50% 50%,transparent 58%,rgba(120,80,60,.30) 100%),
+    linear-gradient(#f4ecdc,#e9dcc3);
+  background-attachment:local;
+  box-shadow:0 30px 90px rgba(0,0,0,.65),0 0 60px rgba(139,20,40,.18);
+  transform:perspective(1000px) rotateX(24deg) translateY(40px) scale(.94);
+  transform-origin:50% 0;
+  transition:transform 1s cubic-bezier(.2,.75,.2,1);
+}
+.carta.is-on .carta__papel{transform:none}
+.carta__papel:focus{outline:none}
+
+.carta__cerrar{
+  position:absolute;
+  top:12px;
+  right:14px;
+  width:40px;
+  height:40px;
+  padding:0;
+  border:0;
+  border-radius:50%;
+  background:transparent;
+  color:#6e0f22;
+  font:400 30px/1 'Cormorant Garamond',Georgia,serif;
+  cursor:pointer;
+  opacity:.6;
+  transition:opacity .3s ease, background .3s ease;
+}
+.carta__cerrar:hover,.carta__cerrar:focus-visible{opacity:1;background:rgba(110,15,34,.08);outline:none}
+
+.carta__sello{
+  position:absolute;
+  top:26px;
+  left:50%;
+  width:62px;
+  height:62px;
+  transform:translateX(-50%) rotate(-8deg);
+  filter:drop-shadow(0 3px 4px rgba(60,10,20,.35));
+}
+
+.carta__epigrafe{
+  margin:0 auto 6px;
+  max-width:28em;
+  text-align:center;
+  font-style:italic;
+  font-size:clamp(14px,1.6vw,16px);
+  letter-spacing:.04em;
+  color:#7a6068;
+}
+.carta__epigrafe::after{
+  content:"";
+  display:block;
+  width:56px;
+  height:1px;
+  margin:14px auto 0;
+  background:linear-gradient(90deg,transparent,#8c1428,transparent);
+}
+
+.carta__titulo{
+  margin:10px 0 18px;
+  text-align:center;
+  font:400 clamp(38px,6vw,52px)/1.1 'Pinyon Script',cursive;
+  color:#6e0f22;
+}
+
+.carta__cuerpo p{
+  margin:0 0 1em;
+  font-size:clamp(17px,2vw,20px);
+  line-height:1.7;
+  text-align:justify;
+  hyphens:auto;
+  text-wrap:pretty;
+}
+@media (max-width:480px){
+  .carta__cuerpo p{text-align:left}
+}
+/* capitular roja, como en los libros */
+.carta__cuerpo p:first-child::first-letter{
+  float:left;
+  margin:.06em .1em 0 0;
+  font:600 3.4em/.8 'Cormorant Garamond',Georgia,serif;
+  color:#8c1428;
+}
+
+.carta__pie{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:16px;
+  margin-top:18px;
+}
+.carta__flor{
+  flex:none;
+  width:56px;
+  height:auto;
+  transform:rotate(-14deg);
+  opacity:.85;
+}
+.carta__firma{
+  margin:0 0 6px;
+  font:400 clamp(28px,4vw,36px)/1.2 'Pinyon Script',cursive;
+  color:#4a2233;
+  text-align:right;
 }
 
 /* ---------- Portada ---------- */
@@ -355,8 +578,11 @@ body{
 .sonido[aria-pressed="true"] .sonido__tachado{opacity:1}
 
 @media (prefers-reduced-motion:reduce){
-  .parpadeo,.respira,.brisa,.bombilla,.luciernaga,.brasa,.gato,.inicio__pista,.copo,.copo__vaiven{animation:none}
+  .parpadeo,.respira,.brisa,.bombilla,.luciernaga,.brasa,.gato,.inicio__pista,.copo,.copo__vaiven,.niebla{animation:none}
   .vapor{animation:none;opacity:.3}
   .humo{animation:none;opacity:.35}
   .mensajes__texto{transition:opacity .4s ease}
+  .nota.is-tocable .nota__halo{animation:none}
+  .carta,.carta__papel{transition:none}
+  .carta__papel{transform:none}
 }

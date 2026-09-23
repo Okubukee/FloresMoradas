@@ -7,7 +7,7 @@
 <meta name="description" content="Un balcon de noche y unas palabras.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Pinyon+Script&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/escena.css">
 </head>
 <body>
@@ -84,6 +84,23 @@
         <stop offset="70%"  stop-color="#e9dcff" stop-opacity=".45"/>
         <stop offset="100%" stop-color="#ffffff" stop-opacity=".95"/>
       </linearGradient>
+      <!-- Guiños a Crepusculo -->
+      <radialGradient id="gNiebla">
+        <stop offset="0%"   stop-color="#b3a6d6" stop-opacity=".5"/>
+        <stop offset="60%"  stop-color="#9d8fc4" stop-opacity=".18"/>
+        <stop offset="100%" stop-color="#9d8fc4" stop-opacity="0"/>
+      </radialGradient>
+      <!-- tulipan de Luna Nueva: rojo en la base, blanco en las puntas -->
+      <linearGradient id="gTulipan" x1="0" y1="1" x2="0" y2="0">
+        <stop offset="0%"   stop-color="#8c0f2a"/>
+        <stop offset="55%"  stop-color="#c3263e"/>
+        <stop offset="85%"  stop-color="#efd6da"/>
+        <stop offset="100%" stop-color="#fff6f4"/>
+      </linearGradient>
+      <radialGradient id="gManzana">
+        <stop offset="0%"   stop-color="#ff5a6e" stop-opacity=".5"/>
+        <stop offset="100%" stop-color="#ff5a6e" stop-opacity="0"/>
+      </radialGradient>
       <clipPath id="cSuelo">
         <path d="M256 580 L944 580 L1080 1400 L120 1400 Z"/>
       </clipPath>
@@ -132,13 +149,19 @@
     <path d="M-700 392 L-400 330 L-180 388 L110 322 L200 376 L316 292 L414 372 L506 338 L600 392 L1200 392 L1900 392 L1900 456 L-700 456 Z"
           fill="#3b2a5e" opacity=".42"/>
 
+    <!-- Bosque de pinos, como en Forks (escena.js) -->
+    <g id="pinosLejos"></g>
     <g id="ciudadLejos"></g>
     <ellipse cx="600" cy="442" rx="1100" ry="18" fill="#8d79bd" opacity=".16" filter="url(#fNiebla)"/>
+    <g id="pinosCerca"></g>
     <g id="ciudadMedia"></g>
+    <!-- Niebla que cruza despacio la ciudad (escena.js) -->
+    <g id="nieblaLejos"></g>
 
     <!-- La ciudad que sigue por debajo del balcon -->
     <rect x="-700" y="466" width="2600" height="740" fill="url(#gAbajo)"/>
     <g id="ciudadCerca"></g>
+    <g id="nieblaCerca"></g>
     <g id="farolas"></g>
 
     <!-- Nieve lejana, cayendo sobre la ciudad (escena.js) -->
@@ -183,16 +206,19 @@
       <path d="M954 586 L954 400" stroke="#d9c2f2" stroke-opacity=".09" stroke-width="2" fill="none"/>
     </g>
 
-    <!-- Calendario colgado en el muro, con el 9 de noviembre marcado -->
-    <g transform="translate(214 418) skewY(5) scale(.72 1)">
+    <!-- Calendario colgado en el muro, con el 9 de noviembre marcado.
+         Con el mensaje del tiempo pasan las hojas, como en Luna Nueva (escena.js) -->
+    <g transform="translate(219 418) skewY(5) scale(.72 1)">
       <line x1="22" y1="-8" x2="22" y2="0" stroke="#6d5a8c" stroke-width="1"/>
       <circle cx="22" cy="-8" r="1.4" fill="#8a76ad"/>
-      <rect x="0" y="0" width="44" height="50" rx="1.5" fill="#bdb3d4" opacity=".78"/>
-      <rect x="0" y="0" width="44" height="11" rx="1.5" fill="#5b2d91" opacity=".9"/>
-      <text x="22" y="8.4" text-anchor="middle" font-family="Georgia,serif" font-size="7.5"
-            letter-spacing="1" fill="#f3e9ff">NOV</text>
-      <g id="diasCalendario" fill="#6d6285"></g>
-      <circle class="dia-marcado" cx="0" cy="0" r="3.4" fill="none" stroke="#8b3fd9" stroke-width="1.3"/>
+      <g id="hojaCalendario">
+        <rect x="0" y="0" width="44" height="50" rx="1.5" fill="#bdb3d4" opacity=".78"/>
+        <rect x="0" y="0" width="44" height="11" rx="1.5" fill="#5b2d91" opacity=".9"/>
+        <text id="mesCalendario" x="22" y="8.4" text-anchor="middle" font-family="Georgia,serif" font-size="7.5"
+              letter-spacing="1" fill="#f3e9ff">NOV</text>
+        <g id="diasCalendario" fill="#6d6285"></g>
+        <circle class="dia-marcado" cx="0" cy="0" r="3.4" fill="none" stroke="#8b3fd9" stroke-width="1.3"/>
+      </g>
     </g>
 
     <!-- Postes de la barandilla contra los muros -->
@@ -216,6 +242,23 @@
             fill="none" stroke="#ffffff" stroke-opacity=".5" stroke-width="1"/>
     </g>
 
+    <!-- Manzana roja sobre la nieve de la barandilla (Crepusculo).
+         Brilla al pasar por encima o al tocarla -->
+    <g id="manzana" class="manzana" transform="translate(195 -142)">
+      <circle class="manzana__brillo" id="brilloManzana" cx="683" cy="621" r="18" fill="url(#gManzana)"/>
+      <ellipse cx="684" cy="627.5" rx="7" ry="1.6" fill="#000" opacity=".3" filter="url(#fSuave)"/>
+      <path d="M683 616.5 C 680 614.5, 676.5 616, 676.5 620.5 C 676.5 625, 679.5 628, 682 627.5
+               C 682.6 627.4, 683.4 627.4, 684 627.5 C 686.5 628, 689.5 625, 689.5 620.5
+               C 689.5 616, 686 614.5, 683 616.5 Z" fill="#9e1b2c"/>
+      <path d="M686 616 C 688.6 616.4, 689.5 618.6, 689.5 620.5 C 689.5 625, 686.5 628, 684 627.5
+               C 686.4 625.6, 687.4 621, 686 616 Z" fill="#6a0f1e" opacity=".8"/>
+      <ellipse cx="679.8" cy="619.4" rx="1.4" ry="2.2" fill="#ffe3e6" opacity=".38" transform="rotate(20 679.8 619.4)"/>
+      <path d="M683 616.5 C 683 614.4, 683.6 613, 684.6 612" fill="none" stroke="#3a2410" stroke-width="1" stroke-linecap="round"/>
+      <path d="M684.4 613.2 C 686.4 611.4, 688.6 611.6, 689.4 612.4 C 687.6 613.8, 685.6 614, 684.4 613.2 Z" fill="#38684a"/>
+      <!-- zona para tocarla, algo mas grande que la manzana -->
+      <circle cx="683" cy="621" r="13" fill="transparent"/>
+    </g>
+
     <!-- Luz calida sobre el suelo -->
     <ellipse cx="600" cy="712" rx="330" ry="54" fill="url(#gCharco)"/>
 
@@ -229,6 +272,34 @@
       <ellipse cx="398" cy="744" rx="118" ry="20"/>
       <ellipse cx="802" cy="744" rx="118" ry="20"/>
       <ellipse cx="600" cy="732" rx="86"  ry="16"/>
+    </g>
+
+    <!-- El prado: flores moradas que brotan en el suelo al final (escena.js).
+         Las del fondo van aqui, detras de los muebles; las de delante, tras el gato -->
+    <g id="prado"></g>
+
+    <!-- Tulipan rojo y blanco en una botella, en la esquina junto al muro (Luna Nueva).
+         Pierde un petalo con el mensaje de "no te presionare" (escena.js -> MOMENTOS) -->
+    <g>
+      <ellipse cx="293" cy="648" rx="14" ry="3" fill="#000" opacity=".45" filter="url(#fSuave)"/>
+      <!-- botella de cristal -->
+      <path d="M284 647 L284 628 C 284 623, 289 621, 290 617 L290 610 L296 610 L296 617
+               C 297 621, 302 623, 302 628 L302 647 C 302 649, 284 649, 284 647 Z"
+            fill="#6f5f9e" fill-opacity=".28" stroke="#d9c2f2" stroke-opacity=".35" stroke-width=".8"/>
+      <path d="M285 640 L301 640 L301 647 C 301 648.6, 285 648.6, 285 647 Z" fill="#9ec4e8" opacity=".18"/>
+      <path d="M287 627 L287 644" stroke="#ffffff" stroke-opacity=".3" stroke-width="1.2" stroke-linecap="round"/>
+      <!-- tallo y hoja -->
+      <path d="M293 645 C 293 630, 292 600, 290 572" stroke="#38684a" stroke-width="2.4"
+            stroke-linecap="round" fill="none" opacity=".85"/>
+      <path d="M292 604 C 282 596, 279 584, 282 574 C 290 582, 293 594, 292 604 Z" fill="#38684a" opacity=".7"/>
+      <g transform="translate(290 570)">
+        <path d="M-8 2 C -9 -8, -5 -16, 0 -19 C 5 -16, 9 -8, 8 2 Z" fill="url(#gTulipan)" opacity=".85"/>
+        <path d="M-9.5 3 C -11.5 -6, -8.5 -14.5, -3 -18 C -1 -10.5, -1 -2, 0 5.5 C -4 6.5, -7.5 5.5, -9.5 3 Z"
+              fill="url(#gTulipan)"/>
+        <path id="petaloTulipan" d="M9.5 3 C 11.5 -6, 8.5 -14.5, 3 -18 C 1 -10.5, 1 -2, 0 5.5 C 4 6.5, 7.5 5.5, 9.5 3 Z"
+              fill="url(#gTulipan)"/>
+        <path d="M-6 -6 C -6 -10, -4.6 -13.4, -3 -15.6" fill="none" stroke="#ffffff" stroke-opacity=".35" stroke-width="1"/>
+      </g>
     </g>
 
     <!-- ========================================================
@@ -274,6 +345,37 @@
         </g>
         <path d="M790 630 C 804 626, 818 626, 830 630" fill="none"
               stroke="#1d123a" stroke-width="2" opacity=".7"/>
+      </g>
+    </g>
+
+    <!-- Ajedrez a medias sobre la silla vacia (Amanecer): la reina roja y un peon
+         blanco, esperando a que alguien mueva -->
+    <g>
+      <ellipse cx="781" cy="681" rx="36" ry="3" fill="#000" opacity=".35" filter="url(#fSuave)"/>
+      <!-- grosor del tablero -->
+      <path d="M750 678 L812 678 L812 681 L750 681 Z" fill="#1a1024"/>
+      <path d="M756 671 L806 671 L812 678 L750 678 Z" fill="#3a2a2e"/>
+      <g id="tablero"></g>
+      <path d="M756 671 L806 671 L812 678 L750 678 Z" fill="none" stroke="#d9c2f2" stroke-opacity=".18" stroke-width=".6"/>
+      <!-- peon blanco, al fondo -->
+      <g transform="translate(796 673.5) scale(.85)">
+        <ellipse cx="0" cy="0" rx="3.6" ry="1.2" fill="#cfc6c4"/>
+        <path d="M-2.6 -.4 C -2 -3, -1.2 -5, -1.2 -6 L1.2 -6 C 1.2 -5, 2 -3, 2.6 -.4 Z" fill="#e9e1dc"/>
+        <ellipse cx="0" cy="-6.2" rx="2" ry=".7" fill="#d8cfca"/>
+        <circle cx="0" cy="-8.2" r="2.2" fill="#f2ece6"/>
+        <path d="M1 -9.6 C 1.8 -9, 2.1 -8, 1.9 -7.2 M1.3 -5.8 C 1.6 -4, 2 -2, 2.3 -.6" fill="none"
+              stroke="#ffffff" stroke-opacity=".6" stroke-width=".5"/>
+      </g>
+      <!-- reina roja, delante -->
+      <g transform="translate(770 676.5)">
+        <ellipse cx="0" cy="0" rx="4.8" ry="1.5" fill="#6e0f22"/>
+        <path d="M-4.6 -.2 L4.6 -.2 L3.8 -2.2 L-3.8 -2.2 Z" fill="#8c1428"/>
+        <path d="M-3 -2.2 C -2.4 -6, -1.5 -9, -1.7 -11 L1.7 -11 C 1.5 -9, 2.4 -6, 3 -2.2 Z" fill="#a3182f"/>
+        <ellipse cx="0" cy="-11" rx="3" ry="1" fill="#8c1428"/>
+        <path d="M-2.8 -11.6 L-3.5 -15 L-1.7 -13.2 L0 -16 L1.7 -13.2 L3.5 -15 L2.8 -11.6 Z" fill="#b51d36"/>
+        <circle cx="0" cy="-16.8" r="1" fill="#c9304a"/>
+        <path d="M1.4 -3 C 1.1 -6, .9 -8.6, 1 -10.4 M2.2 -12 L3 -14.4" fill="none"
+              stroke="#ffb3be" stroke-opacity=".45" stroke-width=".6" stroke-linecap="round"/>
       </g>
     </g>
 
@@ -486,8 +588,10 @@
       </g>
     </g>
 
-    <!-- Nota doblada bajo el jarron: aparece en el ultimo mensaje -->
-    <g id="nota" opacity="0">
+    <!-- Nota doblada bajo el jarron: aparece en el ultimo mensaje y, al tocarla,
+         se abre la carta (el texto esta en escena.js -> CARTA) -->
+    <g id="nota" class="nota" opacity="0" role="button" tabindex="-1" aria-label="Leer la carta">
+      <ellipse class="nota__halo" cx="582" cy="617" rx="30" ry="10" fill="url(#gLuzSilla)"/>
       <ellipse cx="582" cy="617" rx="26" ry="8" fill="url(#gLuzSilla)"/>
       <path d="M561 612 L600 611 L603 620 L564 621 Z" fill="#efe6d6"/>
       <path d="M561 612 L600 611 L601.5 615.5 L562.5 616.5 Z" fill="#ffffff" opacity=".35"/>
@@ -498,6 +602,11 @@
         <circle cx="-2.4" cy="3.2" r="3"/><circle cx="-3.8" cy="-1.2" r="3"/>
         <circle r="1.8" fill="#edd9a6"/>
       </g>
+      <!-- sello de lacre rojo -->
+      <ellipse cx="590" cy="616" rx="3.2" ry="2.2" fill="#8c1428"/>
+      <ellipse cx="589.4" cy="615.4" rx="1.2" ry=".7" fill="#e0586c" opacity=".6"/>
+      <!-- zona para tocarla, mas grande que la nota -->
+      <rect x="552" y="604" width="60" height="24" fill="transparent"/>
     </g>
 
     <!-- antebrazo y mano apoyados junto al movil -->
@@ -523,6 +632,19 @@
       <rect x="578" y="572" width="44" height="6" rx="3" fill="#33205a"/>
       <path d="M580 578 C 584 596, 586 610, 586 620" fill="none" stroke="#c79cf0" stroke-opacity=".18" stroke-width="1.6"/>
 
+      <!-- cinta roja atada al jarron, con un cabo rasgado (Eclipse) -->
+      <g>
+        <path d="M581 587 C 594 590.5, 606 590.5, 619 587 L 618.3 593 C 606 596.5, 594 596.5, 581.7 593 Z" fill="#a3182f"/>
+        <path d="M581.7 593 C 594 596.5, 606 596.5, 618.3 593 L 618.2 594.4 C 606 598, 594 598, 581.8 594.4 Z" fill="#6e0f22"/>
+        <path d="M590 592 C 582 584, 574 588, 578 594 C 582 597.5, 587 595.5, 590 592 Z" fill="#b51d36"/>
+        <path d="M590 592 C 596 584, 604 587, 601 594 C 598 598, 593 595.5, 590 592 Z" fill="#a3182f"/>
+        <path d="M589 593 C 586 602, 582 610, 579 619 L 583 620 C 586 611, 589 603, 591 594 Z" fill="#8c1428"/>
+        <path d="M591 593 C 594 603, 596 610, 600 617 L 602.5 614.5 L 601.8 618.2 L 598.6 617.6 L 597.4 619
+                 C 594 611, 592 603, 590 594 Z" fill="#a3182f"/>
+        <circle cx="590" cy="592.5" r="2.4" fill="#c9304a"/>
+        <path d="M583 588.6 C 594 591.6, 606 591.6, 617 588.6" fill="none" stroke="#ffb3be" stroke-opacity=".3" stroke-width="1"/>
+      </g>
+
       <g class="brisa">
         <!-- tallos -->
         <g stroke="#38684a" stroke-width="3" stroke-linecap="round" fill="none" opacity=".75">
@@ -544,6 +666,7 @@
         </g>
         <!-- flores (las dibuja escena.js) -->
         <g id="flores"></g>
+
 
         <!-- la flor amarilla: brota con el mensaje de las flores amarillas -->
         <g id="florAmarilla" opacity="0">
@@ -594,6 +717,9 @@
       <path d="M-33 2 q 3 2.2 6 0" fill="none" stroke="#4a3a6e" stroke-width="1" stroke-linecap="round"/>
     </g>
 
+    <!-- Flores del prado por delante de los muebles y del gato (escena.js) -->
+    <g id="pradoDelante"></g>
+
     <!-- Vaho de la respiracion con el frio (escena.js) -->
     <g id="vaho"></g>
 
@@ -608,7 +734,83 @@
   <div class="mensajes is-esperando">
     <p class="mensajes__texto" id="mensaje"></p>
     <div class="mensajes__avance"><span id="avance"></span></div>
-    <button type="button" class="mensajes__repetir" id="repetir" tabindex="-1">Volver a empezar</button>
+    <div class="mensajes__botones">
+      <button type="button" class="mensajes__repetir mensajes__repetir--principal" id="leerCarta" tabindex="-1">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6.5h17v11h-17z M3.5 6.5l8.5 6.5 8.5-6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        <span>Leer la carta</span>
+      </button>
+      <!-- el enlace y el texto se cambian en escena.js -> CIERRE -->
+      <a class="mensajes__repetir mensajes__repetir--enlace" id="verVideo" href="#" target="_blank" rel="noopener" tabindex="-1">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 8.8v6.4l5.2-3.2z" fill="currentColor"/></svg>
+        <span class="mensajes__etiqueta"></span>
+      </a>
+      <a class="mensajes__repetir mensajes__repetir--enlace" id="verFloristeria" href="#" target="_blank" rel="noopener" tabindex="-1">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.3" fill="currentColor"/></svg>
+        <span class="mensajes__etiqueta"></span>
+      </a>
+      <button type="button" class="mensajes__repetir mensajes__repetir--discreto" id="repetir" tabindex="-1">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12a7 7 0 1 0 2.1-5M5 4v4h4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Volver a empezar</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ---------- LA CARTA (el texto se escribe en escena.js -> CARTA) ---------- -->
+  <div class="carta" id="carta" role="dialog" aria-modal="true" aria-labelledby="cartaTitulo" hidden>
+    <article class="carta__papel" id="cartaPapel" tabindex="-1">
+      <button type="button" class="carta__cerrar" id="cartaCerrar" aria-label="Cerrar la carta">&times;</button>
+
+      <!-- sello de lacre con una flor -->
+      <svg class="carta__sello" viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <radialGradient id="gLacre" cx="40%" cy="35%">
+            <stop offset="0%" stop-color="#c9304a"/>
+            <stop offset="60%" stop-color="#8c1428"/>
+            <stop offset="100%" stop-color="#5a0a19"/>
+          </radialGradient>
+        </defs>
+        <path d="M32 3 C 40 2, 46 6, 52 9 C 58 14, 62 22, 61 31 C 62 40, 58 49, 51 55
+                 C 45 60, 38 62, 31 61 C 22 62, 14 58, 9 51 C 4 45, 2 38, 3 30
+                 C 3 21, 7 13, 14 8 C 19 4, 26 3, 32 3 Z" fill="url(#gLacre)"/>
+        <circle cx="32" cy="32" r="19" fill="none" stroke="#5a0a19" stroke-width="1.4" opacity=".7"/>
+        <circle cx="32" cy="32" r="17.5" fill="none" stroke="#e0586c" stroke-width=".6" opacity=".35"/>
+        <g fill="#6e0f22" stroke="#e0586c" stroke-opacity=".3" stroke-width=".6">
+          <ellipse cx="32" cy="24" rx="4.2" ry="6"/>
+          <ellipse cx="32" cy="24" rx="4.2" ry="6" transform="rotate(72 32 32)"/>
+          <ellipse cx="32" cy="24" rx="4.2" ry="6" transform="rotate(144 32 32)"/>
+          <ellipse cx="32" cy="24" rx="4.2" ry="6" transform="rotate(216 32 32)"/>
+          <ellipse cx="32" cy="24" rx="4.2" ry="6" transform="rotate(288 32 32)"/>
+        </g>
+        <circle cx="32" cy="32" r="3" fill="#a3182f"/>
+        <ellipse cx="23" cy="17" rx="6" ry="3" fill="#ffffff" opacity=".14" transform="rotate(-30 23 17)"/>
+      </svg>
+
+      <p class="carta__epigrafe" id="cartaEpigrafe"></p>
+      <h2 class="carta__titulo" id="cartaTitulo"></h2>
+      <div class="carta__cuerpo" id="cartaCuerpo"></div>
+
+      <footer class="carta__pie">
+        <!-- flor morada prensada entre las hojas -->
+        <svg class="carta__flor" viewBox="0 0 80 110" aria-hidden="true">
+          <path d="M40 44 C 42 64, 36 84, 30 106" fill="none" stroke="#5f7a52" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+          <path d="M38 74 C 26 66, 18 68, 14 76 C 24 80, 32 80, 38 74 Z" fill="#6f8a5e" opacity=".55"/>
+          <path d="M36 88 C 46 82, 54 84, 58 90 C 50 95, 42 94, 36 88 Z" fill="#6f8a5e" opacity=".5"/>
+          <g fill="#8b52c9" opacity=".72">
+            <ellipse cx="40" cy="28" rx="8" ry="11"/>
+            <ellipse cx="40" cy="28" rx="8" ry="11" transform="rotate(72 40 40)"/>
+            <ellipse cx="40" cy="28" rx="8" ry="11" transform="rotate(144 40 40)"/>
+            <ellipse cx="40" cy="28" rx="8" ry="11" transform="rotate(216 40 40)"/>
+            <ellipse cx="40" cy="28" rx="8" ry="11" transform="rotate(288 40 40)"/>
+          </g>
+          <g fill="none" stroke="#5b2d91" stroke-opacity=".35" stroke-width=".7">
+            <path d="M40 38 L40 22"/><path d="M42 39 L54 33"/><path d="M41 42 L48 53"/>
+            <path d="M39 42 L32 53"/><path d="M38 39 L26 33"/>
+          </g>
+          <circle cx="40" cy="40" r="4" fill="#d8b86a" opacity=".85"/>
+        </svg>
+        <p class="carta__firma" id="cartaFirma"></p>
+      </footer>
+    </article>
   </div>
 
   <!-- notificacion del movil (el texto esta en escena.js -> MOMENTOS) -->
