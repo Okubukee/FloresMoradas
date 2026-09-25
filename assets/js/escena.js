@@ -82,6 +82,34 @@ const CARTA = {
   firma: 'Con cariño,',
 };
 
+// Segunda carta, con su propio boton al final ("Carta de Muerte").
+const CARTA_MUERTE = {
+  epigrafe: '',
+  titulo: 'Carta de Muerte',
+  parrafos: [
+    'Siento que debo aclarártelo. Quizás quieras dejar el pasado atrás, pero las cosas no eran como tú pensabas. Cuando murió mi padre no es que no te necesitara; simplemente no sabía cómo gestionar absolutamente nada. Pensaba que necesitaba espacio, y fue una experiencia horrible tener que estar rodeado de tanta gente. Por algún motivo, no quería ser una molestia para ti ni convertirme en una carga. No sé qué lógica o pensamiento seguí en ese momento, pero solo quería no molestarte ni perjudicarte, y supongo que quería estar un poco solo en casa y pensar sobre ello. Aunque, siendo realistas, lo que más necesitaba era hablar de ello, estar contigo y soltarlo todo contigo.',
+    'Suena absurdo porque literalmente había muerto mi padre, pero le decía a mi madre que tenía que ir a trabajar ese mismo día porque no sabía cómo actuar ante una situación así. Fue ella quien me puso los pies en la tierra y recuerdo que me dijo: "Estás loco, acaba de morir tu padre. ¿Cómo irías a trabajar ahora?". Al final avisé de que no podía ir. Cuando mis amigos se enteraron, quisieron animarme o distraerme. Yo no estaba para fiestas ni para nada; ellos suelen quedar en una casa, jugar a juegos de mesa, ver anime y tal, así que no me esperaba que propusieran eso, pero por no saber decir que no, me vi arrastrado a salir. No lo disfruté, no quería estar ahí y solo esperaba a que pasara el tiempo para no pensar.',
+    'Aunque suene raro, yo solo estaba esperando a que llegara el fin de semana para verte, mirarte a la cara y abrazarte. Ni siquiera sabía si iba a seguir llorando, cómo reaccionaría ni qué sentía. Con el tiempo me he dado cuenta de que sigo llorando cuando lo pienso o hablo de ello. Estaba perdido, completamente confuso, y me dolió no saber expresarte que te necesitaba mucho más de lo que pude comunicarte.',
+    'No hubo fiesta ni compañía que necesitara más que la tuya. Nunca me había visto en una situación así y simplemente no sabía cómo reaccionar. Cuando murieron mis padrinos realmente no me afectó, y cuando murieron mis abuelos no vi ni a mi padre ni a mi madre reaccionar por ello, y mucho menos buscar consuelo en nadie: ni entre ellos, ni en sus hijos, ni en nada. Nunca exteriorizaron nada, así que mi experiencia era demasiado escasa como para saber siquiera cómo actuar. Lo pienso a veces y debí haber sido egoísta contigo y pedirte que vinieras para estar conmigo cuando él murió y ese finde, pero sentía que era mejor no molestarte y estar solo. Me da mucha rabia pensar que te hice sentir que no te necesitaba, cuando la realidad era lo contrario. Mi relación con mi padre fue complicada, con poca cercanía emocional; mi madre me decía que él me quería mucho, pero sinceramente no lo recuerdo bien, todo es borroso. Ni siquiera tuve buenas referencias emocionales en mi familia: mi madre es como una roca, ha tenido una vida muy dura y casi nunca demuestra vulnerabilidad, aunque los quiero mucho a los dos.',
+    'Por último, me quiero disculpar de nuevo por lo que te dije por Discord. Tú no tienes ninguna culpa. No te antepuse a mi padre ni nada parecido; simplemente, ante la desesperación de ver que te ibas, solo quería decirte que me importas mucho y usé unas palabras horribles que te hicieron daño y que también menospreciaron a mi padre.',
+    'Espero que esto sirva para aclarar un poco las cosas. Me dolía mucho pensar que la relación terminó con esa imagen de mí, cuando la realidad es que lo único que esperaba era poder verte, abrazarte y escucharte.',
+  ],
+  firma: '',
+};
+
+// Tercera carta, con su propio boton al final ("Carta Emoción Incompleta").
+const CARTA_INCOMPLETA = {
+  epigrafe: '',
+  titulo: 'Carta Emoción Incompleta',
+  parrafos: [
+    'Lo segundo que quiero aclararte es que no fui consciente de que te estaba invalidando emocionalmente. Tiempo después reflexioné y me di cuenta de que había estado limitando tu forma de quererme. Me rompió bastante pensarlo, porque era darme cuenta de que me equivocaba en cosas que yo creía que no.',
+    'Más tarde, cuando hablamos después de mucho tiempo, me dijiste que te invalidaba emocionalmente, y eso me hizo pensar y reflexionar. No fue tan obvio para mí, pero al recordar cuando me corregías al hablar con mi madre y en otros momentos, me doy cuenta de que en realidad aprendí eso de mi padre y lo aplicaba con mis seres queridos: contigo y con mi madre. Siempre pensé que actuaba de la forma correcta: sabía expresarme, sabía escuchar y era como un "buen psicólogo". La realidad es que había algo invisible para mí.',
+    'Recientemente tuve una conversación con mi madre y también intento poner en práctica el aprender a comunicarme, para no repetir esa invalidación que al final me sale de forma inconsciente contigo y con ella. Me puse a llorar intentando hablar con ella. No es fácil, porque para ella la muerte de mi padre tuvo varias causas y yo fui una de ellas. No me odia, pero sí me culpa un poco cuando se enfada. Toda esta comunicación con mi madre es nueva para mí, y a veces es difícil y desesperante.',
+    'Lo que trato de decirte es que escucharé las cosas que me digas y me esforzaré por explicarme. No te culpo de nada; solo pienso que me equivoqué contigo, con errores, asumiendo cosas y sin cuestionármelas. Llegué tarde, porque no fue durante la relación, pero espero que este pequeño diario te diga algo.',
+  ],
+  firma: '',
+};
+
 // La cancion se pone en index.html -> <audio id="musica">.
 const MUSICA = {
   volumen: 0.6,         // 0 a 1
@@ -992,7 +1020,7 @@ const cierre = async () => {
   elMensaje.classList.add('is-on');
   await esperar(CIERRE.esperaBoton);
 
-  [elLeerCarta, elVerVideo, elVerFloristeria, elRepetir].forEach((boton) => {
+  [elLeerCarta, elCartaMuerte, elCartaIncompleta, elVerVideo, elVerFloristeria, elRepetir].forEach((boton) => {
     if (!boton) return;
     boton.classList.add('is-on');
     boton.tabIndex = 0;
@@ -1116,24 +1144,30 @@ const prepararEnlace = (id, enlace, texto) => {
 const elVerVideo = prepararEnlace('verVideo', CIERRE.enlaceVideo, CIERRE.textoVideo);
 const elVerFloristeria = prepararEnlace('verFloristeria', CIERRE.enlaceFloristeria, CIERRE.textoFloristeria);
 
-if (elCarta) {
+const elCartaMuerte = document.getElementById('leerCartaMuerte');
+const elCartaIncompleta = document.getElementById('leerCartaIncompleta');
+
+const escribirCarta = (carta) => {
   const epigrafe = document.getElementById('cartaEpigrafe');
-  epigrafe.textContent = CARTA.epigrafe;
-  epigrafe.hidden = !CARTA.epigrafe;
-  document.getElementById('cartaTitulo').textContent = CARTA.titulo;
-  document.getElementById('cartaFirma').textContent = CARTA.firma;
-  document.getElementById('cartaCuerpo').replaceChildren(...CARTA.parrafos.map((texto) => {
+  epigrafe.textContent = carta.epigrafe;
+  epigrafe.hidden = !carta.epigrafe;
+  document.getElementById('cartaTitulo').textContent = carta.titulo;
+  const firma = document.getElementById('cartaFirma');
+  firma.textContent = carta.firma;
+  firma.hidden = !carta.firma;
+  document.getElementById('cartaCuerpo').replaceChildren(...carta.parrafos.map((texto) => {
     const p = document.createElement('p');
     p.textContent = texto;
     return p;
   }));
-}
+};
 
 let focoAntesDeLaCarta = null;
 let cerrandoCarta = null;
-const abrirCarta = () => {
+const abrirCarta = (carta = CARTA) => {
   if (!elCarta) return;
   clearTimeout(cerrandoCarta);
+  escribirCarta(carta);
   focoAntesDeLaCarta = document.activeElement;
   elCarta.hidden = false;
   elCartaPapel.scrollTop = 0;
@@ -1172,7 +1206,9 @@ if (elNota) {
     }
   });
 }
-if (elLeerCarta) elLeerCarta.addEventListener('click', abrirCarta);
+if (elLeerCarta) elLeerCarta.addEventListener('click', () => abrirCarta(CARTA));
+if (elCartaMuerte) elCartaMuerte.addEventListener('click', () => abrirCarta(CARTA_MUERTE));
+if (elCartaIncompleta) elCartaIncompleta.addEventListener('click', () => abrirCarta(CARTA_INCOMPLETA));
 
 /* las ventanas de la ciudad se apagan poco a poco segun avanzan los mensajes */
 const ventanasEnOrden = [...VENTANAS].sort(() => Math.random() - 0.5);
@@ -1257,7 +1293,7 @@ if (elRepetir) {
   elRepetir.addEventListener('click', async () => {
     if (repitiendo) return;
     repitiendo = true;
-    [elLeerCarta, elVerVideo, elVerFloristeria, elRepetir].forEach((boton) => {
+    [elLeerCarta, elCartaMuerte, elCartaIncompleta, elVerVideo, elVerFloristeria, elRepetir].forEach((boton) => {
       if (!boton) return;
       boton.classList.remove('is-on');
       boton.tabIndex = -1;
