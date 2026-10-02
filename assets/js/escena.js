@@ -8,15 +8,14 @@ const MENSAJES = [
   'Hola, espero que estés bien.',
   'Sé que no me lo pediste y también que nunca debiste haberlo hecho.',
   'No quiero que vuelvas a vivir la vida sin flores y espero de corazón que las disfrutes mucho.',
-  'Esta vez no quiero dejarte un texto bíblico, aunque me gusta escribirte por no poder hablarte.',
-  'Quiero dejarte claro que sé que esto no soluciona nada y no hago esto con esa intención; lo hago porque te amo y, al menos, creo estar aprendiendo de forma triste a hacerlo.',
-  'También quiero decirte que sé que te genera ansiedad y te da miedo repetir la misma situación.',
+  'Quiero dejarte claro que sé que esto no soluciona nada y no hago esto con esa intención; lo hago porque te amo y, al menos, creo estar aprendiendo de forma triste a hacerlo bien.',
+  'También quiero decirte que sé que te pueda generar ansiedad o miedo repetir la misma situación. ',
   'No te presionaré.',
   'Si algún día te sientes segura o decides hablar, aun con miedo e incertidumbre, permíteme ser la luz en tu oscuridad, al igual que tú lo fuiste todo este tiempo para mí.',
   'Tuve mucho miedo el día de las flores amarillas, pero fui muy feliz.',
   'Por eso, el día que te sientas preparada —con todo el tiempo y el espacio que necesites—, espero hacerte feliz como tú lo hiciste conmigo.',
   'Valoro mucho que te esforzaras en escucharme y hablar conmigo, fue muy especial para mí.',
-  'El dia 9 de noviembre ve a la floristeria XXX para recoger tus flores encargado a tu nombre.'
+  'El dia 9 de octubre de 10am a 13am(en caso que te venga mal el horario puedo hablar con ellos y me ajusto para que puedas recibirlo de forma comoda) ve a la "Floristeria Alguer Valencia" para recoger tus flores encargado a mi nombre Daniel Cardenas Gomes o el codigo de pedido "JE5MA".'
 ];
 
 const ESCENA = {
@@ -53,7 +52,7 @@ const CIERRE = {
   enlaceVideo: 'https://www.youtube.com/shorts/dXnECzPj0GQ',
   // boton que abre la floristeria en otra pestaña (deja enlaceFloristeria en '' para quitarlo)
   textoFloristeria: 'Ver la floristería',
-  enlaceFloristeria: 'https://maps.app.goo.gl/HVmx4EXgC9hLbsZK8',
+  enlaceFloristeria: 'https://maps.app.goo.gl/hmPazbYVn1pL3E9c7',
 };
 
 // Cosas que pasan en la escena con ciertos mensajes. Se busca el trozo de
@@ -63,51 +62,46 @@ const MOMENTOS = {
   florAmarilla: 'flores amarillas',  // brota una flor amarilla en el ramo
   sillaVacia: 'ser la luz',          // se ilumina la silla de la manta
   movil: 'floristeria',              // el movil se enciende con un aviso
-  avisoMovil: '9 de noviembre 🌸',
+  avisoMovil: '9 de octubre 🌸',
   mesesPasan: 'el tiempo y el espacio', // el calendario pasa un año entero (Luna Nueva)
   petaloTulipan: 'no te presionare',    // cae un petalo del tulipan (Luna Nueva)
 };
 
 // La carta que se abre al tocar la nota bajo el jarron (sale en el ultimo
 // mensaje) o con el boton "Leer la carta" del final.
-// Cada texto de "parrafos" es un parrafo. Deja "epigrafe" vacio ('') para quitarlo.
+// Cada texto de "parrafos" es un parrafo, en el orden en que se leen. La carta
+// se reparte sola en varias paginas (ver "paginarTexto" mas abajo) para que no
+// haga falta scrollear: no hace falta tocar nada de esto para eso.
 const CARTA = {
   epigrafe: '«Antes de ti, mi vida era como una noche sin luna. Muy oscura, pero había estrellas, puntos de luz y razón… Y entonces cruzaste mi cielo como una estrella fugaz.»',
   titulo: 'Para ti Estela',
   parrafos: [
-    'Hola, quiero decirte que estoy disfrutando mucho dedicarte cosas asi. No esperaba divertirme haciendote cosas originales y imaginarme quizas una sonrisa invisible que no pueda ver.',
-    'Esta vez quise ser mas detallista, no se si quizas te fijaste. Pero hay algunos detalles interesantes ademas de referencias a Crepusculo ¿Quien diria que esto fuera divertido? Aparte resulta que si haces las cosas con mucho tiempo de antelacion, es mucho mas comodo hacer estas cosas.',
-    'Aparte de eso tambien queria decirte algunas cosas sobre ti. Siempre me pareciste hermosa, admiro tu caracter, tu voz, extraño tu acento en otros idiomas, tu sonrisa, tu estilo, tus ocurrencias, tu risa, tu mirada, tu preocupacion, eres inteligente, detallista, dulce, buena, quizas puedas decir que no eres perfecta. Pero que importa pensar en eso, cuando existes tu.',
+    'Te amo. Esa es la conclusión a la que llego, y quería que se reflejara de alguna manera. Puede que no lo quieras, y lo comprendo: me demoré demasiado en decirte que te amo, en demostrártelo, y por eso lo único que creo que puedo hacer es seguir amándote, en la medida en que me lo permitas.',
+    'Es normal que tengas miedo, que no confíes en mí, que quieras priorizarte y no salir dañada. Lo sé casi perfectamente; mi indecisión e inseguridad nacían de ese mismo pensamiento: no quería hacerte daño, no quería perderte.',
+    'Tuve que darme cuenta de cosas tan obvias que da rabia, mirar a la raíz de los problemas. No quiero agobiarte, pero tampoco dejarte ni abandonarte cuando las cosas se podrían solucionar para los dos.',
+    'Quizás seamos muy distintos, pero creo que conectamos de verdad. Podré equivocarme, pero quiero apostar por lo que quiero en mi vida. No fui el hombre que querías y, siendo sincero, no podía serlo en ese entonces, por triste que suene.',
+    'Lo único que puedo decirte es que te amaba, aunque no supiera bien cómo hacerlo. Personalmente, estas cosas me ilusionan, y ahora te imagino en una foto con un ramo de flores.',
+    'Vi que en octubre habrá unos ocho eventos astronómicos. Si te animas a ir juntos a alguno, yo me encargo de todo: de dejarte en casa, de darte tu espacio y de cualquier cosa que te haga sentir cómoda. Comer algo rico, estar calentitos al aire libre y disfrutar juntos de un poco de tranquilidad.',
+    'Sé que me dirás que no, pero al menos quería proponértelo. No tengo intención de que suceda nada más que eso; me gustaría que pudiéramos tener experiencias juntos que den origen a algo bonito, lento, cálido y suave, o al menos así es como lo siento.',
+    'Y esta vez no quiero que sea una promesa, quiero que sea una decisión que se refleje en experiencias. Si todavía no te sientes preparada, no te preocupes, no tengo prisa.',
+    'Al final, te quiero a ti, y te propondré alguna otra actividad que podamos disfrutar: manualidades, naturaleza, excursiones… y que esta vez el dinero no sea un impedimento para nada. Quiero de todo corazón hacer esas cosas contigo, aunque haga falta tiempo para que tú también quieras.',
+    'Te amo y entiendo las consecuencias de mis acciones. Tendré que demostrarte que vale la pena una segunda oportunidad, resolver los conflictos internos que tengamos, demostrarles a tus amistades que no tienen por qué preocuparse por lo que pueda pasar y ganarme ante tu familia el derecho a que puedan confiar en mí.',
+    'También quería hablarte de dos temas. Cuando me hablaste de la invalidación emocional, me hizo reflexionar. Siempre pensé que era una persona sin ego, y la verdad es que sí lo tenía: creía que era bueno comunicándome, que era un buen "psicólogo" y que realmente no tenía que cambiar.',
+    'En parte, eso se reflejaba en nuestra relación y en la relación con mi madre. Muchas veces me decías que le hablara mejor, y empecé a darme cuenta. He llorado con ella y me estoy abriendo bastante; quizás sea un paso pequeño, pero creo que es un buen paso.',
+    'Las últimas veces que tuve esas actitudes, que siento que aprendí de mi padre, me disculpé y traté de explicárselo: que la quiero y que esta vez me estoy esforzando por comunicarme mejor.',
+    'Es duro, porque ella te usa como arma, igual que la muerte de mi padre, pero en parte también tengo que aceptar esas verdades crudas en vez de ignorarlas y no escucharlas. Porque, aunque nazcan de la rabia, tiene razón, y por eso creo que es algo que debo tener presente. Te agradezco haberlo compartido conmigo todo este tiempo.',
+    'El otro tema es la muerte de mi padre. No sabía cómo actuar; mis padres nunca mostraron que necesitaran a nadie cuando murieron mis abuelos. No quería ser una molestia para ti.',
+    'Todo el mundo me lo dice, y yo mismo me lo repito muchas veces: debí haber sido egoísta, porque en todo momento necesitaba tenerte a mi lado para poder procesarlo. Yo no quería salir de fiesta, pero no supe decir que no; pensaba que necesitaba pasar la noche solo en la cama para procesarlo.',
+    'También pensaba que el día de la muerte de mi padre tenía que ir a trabajar, y evidentemente no; gracias a que mi madre me dijo que no fuera, pude tomar la decisión de quedarme.',
+    '¿Qué quiero decirte con esto? Que ahora, después de un tiempo, puedo decírtelo bien: te necesitaba. Eras muy importante para mí en ese momento, y estuve esperándote la semana siguiente para poder verte. Igual que me arrepiento de haber pensado que lo mejor era dejarlo.',
+    'Quizás me vino bien para darme cuenta de muchas cosas, pero eso no cambia que me arrepiento profundamente de no haber sido egoísta, de no haber podido cambiar durante la relación y de haber tomado la decisión de dejarlo.',
+    'Por eso te lo pido de corazón: deja de pensar que no te necesité ese día. Te necesitaba más de lo que podía expresar, y todo pudo haber sido mejor.',
+    'Me lo repito siempre: si hubiera seguido hablando y comunicándome contigo, si me hubiera comunicado más con mi padre… Lo llevo grabado, y en parte por eso me estoy abriendo tanto, porque mi mayor error fue no hablar cuando tenía que hacerlo.',
+    'Y, tristemente, algo tan básico como la comunicación se me quedará tatuado en la piel.',
+    'Déjame colocar los ladrillos, en vez de hacer un contrato.',
+    'PD: Se supone que es un ramo de 12 flores. Sin querer, de tanto revisar, te compré el de 6 en vez del de 12. Contacté con ellos y pagué la diferencia, pero quería aclararlo: deberían ser 12 flores, así que espero que te den las 12. Siento las molestias, xd.',
   ],
   firma: 'Con cariño,',
-};
-
-// Segunda carta, con su propio boton al final ("Carta de Muerte").
-const CARTA_MUERTE = {
-  epigrafe: '',
-  titulo: 'Carta de Muerte',
-  parrafos: [
-    'Siento que debo aclarártelo. Quizás quieras dejar el pasado atrás, pero las cosas no eran como tú pensabas. Cuando murió mi padre no es que no te necesitara; simplemente no sabía cómo gestionar absolutamente nada. Pensaba que necesitaba espacio, y fue una experiencia horrible tener que estar rodeado de tanta gente. Por algún motivo, no quería ser una molestia para ti ni convertirme en una carga. No sé qué lógica o pensamiento seguí en ese momento, pero solo quería no molestarte ni perjudicarte, y supongo que quería estar un poco solo en casa y pensar sobre ello. Aunque, siendo realistas, lo que más necesitaba era hablar de ello, estar contigo y soltarlo todo contigo.',
-    'Suena absurdo porque literalmente había muerto mi padre, pero le decía a mi madre que tenía que ir a trabajar ese mismo día porque no sabía cómo actuar ante una situación así. Fue ella quien me puso los pies en la tierra y recuerdo que me dijo: "Estás loco, acaba de morir tu padre. ¿Cómo irías a trabajar ahora?". Al final avisé de que no podía ir. Cuando mis amigos se enteraron, quisieron animarme o distraerme. Yo no estaba para fiestas ni para nada; ellos suelen quedar en una casa, jugar a juegos de mesa, ver anime y tal, así que no me esperaba que propusieran eso, pero por no saber decir que no, me vi arrastrado a salir. No lo disfruté, no quería estar ahí y solo esperaba a que pasara el tiempo para no pensar.',
-    'Aunque suene raro, yo solo estaba esperando a que llegara el fin de semana para verte, mirarte a la cara y abrazarte. Ni siquiera sabía si iba a seguir llorando, cómo reaccionaría ni qué sentía. Con el tiempo me he dado cuenta de que sigo llorando cuando lo pienso o hablo de ello. Estaba perdido, completamente confuso, y me dolió no saber expresarte que te necesitaba mucho más de lo que pude comunicarte.',
-    'No hubo fiesta ni compañía que necesitara más que la tuya. Nunca me había visto en una situación así y simplemente no sabía cómo reaccionar. Cuando murieron mis padrinos realmente no me afectó, y cuando murieron mis abuelos no vi ni a mi padre ni a mi madre reaccionar por ello, y mucho menos buscar consuelo en nadie: ni entre ellos, ni en sus hijos, ni en nada. Nunca exteriorizaron nada, así que mi experiencia era demasiado escasa como para saber siquiera cómo actuar. Lo pienso a veces y debí haber sido egoísta contigo y pedirte que vinieras para estar conmigo cuando él murió y ese finde, pero sentía que era mejor no molestarte y estar solo. Me da mucha rabia pensar que te hice sentir que no te necesitaba, cuando la realidad era lo contrario. Mi relación con mi padre fue complicada, con poca cercanía emocional; mi madre me decía que él me quería mucho, pero sinceramente no lo recuerdo bien, todo es borroso. Ni siquiera tuve buenas referencias emocionales en mi familia: mi madre es como una roca, ha tenido una vida muy dura y casi nunca demuestra vulnerabilidad, aunque los quiero mucho a los dos.',
-    'Por último, me quiero disculpar de nuevo por lo que te dije por Discord. Tú no tienes ninguna culpa. No te antepuse a mi padre ni nada parecido; simplemente, ante la desesperación de ver que te ibas, solo quería decirte que me importas mucho y usé unas palabras horribles que te hicieron daño y que también menospreciaron a mi padre.',
-    'Espero que esto sirva para aclarar un poco las cosas. Me dolía mucho pensar que la relación terminó con esa imagen de mí, cuando la realidad es que lo único que esperaba era poder verte, abrazarte y escucharte.',
-  ],
-  firma: '',
-};
-
-// Tercera carta, con su propio boton al final ("Carta Emoción Incompleta").
-const CARTA_INCOMPLETA = {
-  epigrafe: '',
-  titulo: 'Carta Emoción Incompleta',
-  parrafos: [
-    'Lo segundo que quiero aclararte es que no fui consciente de que te estaba invalidando emocionalmente. Tiempo después reflexioné y me di cuenta de que había estado limitando tu forma de quererme. Me rompió bastante pensarlo, porque era darme cuenta de que me equivocaba en cosas que yo creía que no.',
-    'Más tarde, cuando hablamos después de mucho tiempo, me dijiste que te invalidaba emocionalmente, y eso me hizo pensar y reflexionar. No fue tan obvio para mí, pero al recordar cuando me corregías al hablar con mi madre y en otros momentos, me doy cuenta de que en realidad aprendí eso de mi padre y lo aplicaba con mis seres queridos: contigo y con mi madre. Siempre pensé que actuaba de la forma correcta: sabía expresarme, sabía escuchar y era como un "buen psicólogo". La realidad es que había algo invisible para mí.',
-    'Recientemente tuve una conversación con mi madre y también intento poner en práctica el aprender a comunicarme, para no repetir esa invalidación que al final me sale de forma inconsciente contigo y con ella. Me puse a llorar intentando hablar con ella. No es fácil, porque para ella la muerte de mi padre tuvo varias causas y yo fui una de ellas. No me odia, pero sí me culpa un poco cuando se enfada. Toda esta comunicación con mi madre es nueva para mí, y a veces es difícil y desesperante.',
-    'Lo que trato de decirte es que escucharé las cosas que me digas y me esforzaré por explicarme. No te culpo de nada; solo pienso que me equivoqué contigo, con errores, asumiendo cosas y sin cuestionármelas. Llegué tarde, porque no fue durante la relación, pero espero que este pequeño diario te diga algo.',
-  ],
-  firma: '',
 };
 
 // La cancion se pone en index.html -> <audio id="musica">.
@@ -420,8 +414,8 @@ if (gBalaustres) {
   }
 }
 
-/* ---------- Calendario: noviembre, con el dia 9 marcado ---------- */
-const DIA_MARCADO = { anio: 2026, mes: 10, dia: 9 }; // mes: 0 = enero
+/* ---------- Calendario: octubre, con el dia 9 marcado ---------- */
+const DIA_MARCADO = { anio: 2026, mes: 9, dia: 9 }; // mes: 0 = enero
 const NOMBRES_MES = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'];
 const hojaCalendario = document.getElementById('hojaCalendario');
 const elMes = document.getElementById('mesCalendario');
@@ -1020,7 +1014,7 @@ const cierre = async () => {
   elMensaje.classList.add('is-on');
   await esperar(CIERRE.esperaBoton);
 
-  [elLeerCarta, elCartaMuerte, elCartaIncompleta, elVerVideo, elVerFloristeria, elRepetir].forEach((boton) => {
+  [elLeerCarta, elVerVideo, elVerFloristeria, elRepetir].forEach((boton) => {
     if (!boton) return;
     boton.classList.add('is-on');
     boton.tabIndex = 0;
@@ -1144,30 +1138,68 @@ const prepararEnlace = (id, enlace, texto) => {
 const elVerVideo = prepararEnlace('verVideo', CIERRE.enlaceVideo, CIERRE.textoVideo);
 const elVerFloristeria = prepararEnlace('verFloristeria', CIERRE.enlaceFloristeria, CIERRE.textoFloristeria);
 
-const elCartaMuerte = document.getElementById('leerCartaMuerte');
-const elCartaIncompleta = document.getElementById('leerCartaIncompleta');
+const elCartaPaginacion = document.getElementById('cartaPaginacion');
+const elCartaAnterior = document.getElementById('cartaAnterior');
+const elCartaSiguiente = document.getElementById('cartaSiguiente');
+const elCartaPaginaNum = document.getElementById('cartaPaginaNum');
 
-const escribirCarta = (carta) => {
+// Reparte los parrafos en paginas cortas (por numero de caracteres) para que
+// la carta se lea sin tener que scrollear.
+const paginarTexto = (parrafos, maxCaracteres = 620) => {
+  const paginas = [];
+  let actual = [];
+  let total = 0;
+  parrafos.forEach((parrafo) => {
+    if (actual.length && total + parrafo.length > maxCaracteres) {
+      paginas.push(actual);
+      actual = [];
+      total = 0;
+    }
+    actual.push(parrafo);
+    total += parrafo.length;
+  });
+  if (actual.length) paginas.push(actual);
+  return paginas;
+};
+
+let cartaPaginas = [];
+let cartaPaginaActual = 0;
+
+const mostrarPagina = (indice) => {
+  if (!cartaPaginas.length) return;
+  cartaPaginaActual = Math.max(0, Math.min(indice, cartaPaginas.length - 1));
+  const esPrimera = cartaPaginaActual === 0;
+  const esUltima = cartaPaginaActual === cartaPaginas.length - 1;
+
   const epigrafe = document.getElementById('cartaEpigrafe');
-  epigrafe.textContent = carta.epigrafe;
-  epigrafe.hidden = !carta.epigrafe;
-  document.getElementById('cartaTitulo').textContent = carta.titulo;
+  epigrafe.hidden = !(esPrimera && CARTA.epigrafe);
+
   const firma = document.getElementById('cartaFirma');
-  firma.textContent = carta.firma;
-  firma.hidden = !carta.firma;
-  document.getElementById('cartaCuerpo').replaceChildren(...carta.parrafos.map((texto) => {
+  firma.hidden = !(esUltima && CARTA.firma);
+
+  document.getElementById('cartaCuerpo').replaceChildren(...cartaPaginas[cartaPaginaActual].map((texto) => {
     const p = document.createElement('p');
     p.textContent = texto;
     return p;
   }));
+
+  if (elCartaPapel) elCartaPapel.scrollTop = 0;
+  if (elCartaAnterior) elCartaAnterior.disabled = esPrimera;
+  if (elCartaSiguiente) elCartaSiguiente.disabled = esUltima;
+  if (elCartaPaginaNum) elCartaPaginaNum.textContent = `${cartaPaginaActual + 1} / ${cartaPaginas.length}`;
+  if (elCartaPaginacion) elCartaPaginacion.hidden = cartaPaginas.length <= 1;
 };
 
 let focoAntesDeLaCarta = null;
 let cerrandoCarta = null;
-const abrirCarta = (carta = CARTA) => {
+const abrirCarta = () => {
   if (!elCarta) return;
   clearTimeout(cerrandoCarta);
-  escribirCarta(carta);
+  document.getElementById('cartaEpigrafe').textContent = CARTA.epigrafe;
+  document.getElementById('cartaTitulo').textContent = CARTA.titulo;
+  document.getElementById('cartaFirma').textContent = CARTA.firma;
+  cartaPaginas = paginarTexto(CARTA.parrafos);
+  mostrarPagina(0);
   focoAntesDeLaCarta = document.activeElement;
   elCarta.hidden = false;
   elCartaPapel.scrollTop = 0;
@@ -1182,6 +1214,9 @@ const cerrarCarta = () => {
   if (focoAntesDeLaCarta && focoAntesDeLaCarta.focus) focoAntesDeLaCarta.focus({ preventScroll: true });
 };
 
+if (elCartaAnterior) elCartaAnterior.addEventListener('click', () => mostrarPagina(cartaPaginaActual - 1));
+if (elCartaSiguiente) elCartaSiguiente.addEventListener('click', () => mostrarPagina(cartaPaginaActual + 1));
+
 if (elCarta) {
   elCartaCerrar.addEventListener('click', cerrarCarta);
   // tocar fuera del papel tambien la cierra
@@ -1189,6 +1224,8 @@ if (elCarta) {
   document.addEventListener('keydown', (e) => {
     if (elCarta.hidden) return;
     if (e.key === 'Escape') cerrarCarta();
+    if (e.key === 'ArrowRight') mostrarPagina(cartaPaginaActual + 1);
+    if (e.key === 'ArrowLeft') mostrarPagina(cartaPaginaActual - 1);
     // con el tabulador el foco se queda dentro de la carta: el papel (para
     // bajar con las flechas) y el boton de cerrar
     if (e.key === 'Tab') {
@@ -1206,9 +1243,7 @@ if (elNota) {
     }
   });
 }
-if (elLeerCarta) elLeerCarta.addEventListener('click', () => abrirCarta(CARTA));
-if (elCartaMuerte) elCartaMuerte.addEventListener('click', () => abrirCarta(CARTA_MUERTE));
-if (elCartaIncompleta) elCartaIncompleta.addEventListener('click', () => abrirCarta(CARTA_INCOMPLETA));
+if (elLeerCarta) elLeerCarta.addEventListener('click', () => abrirCarta());
 
 /* las ventanas de la ciudad se apagan poco a poco segun avanzan los mensajes */
 const ventanasEnOrden = [...VENTANAS].sort(() => Math.random() - 0.5);
@@ -1293,7 +1328,7 @@ if (elRepetir) {
   elRepetir.addEventListener('click', async () => {
     if (repitiendo) return;
     repitiendo = true;
-    [elLeerCarta, elCartaMuerte, elCartaIncompleta, elVerVideo, elVerFloristeria, elRepetir].forEach((boton) => {
+    [elLeerCarta, elVerVideo, elVerFloristeria, elRepetir].forEach((boton) => {
       if (!boton) return;
       boton.classList.remove('is-on');
       boton.tabIndex = -1;
