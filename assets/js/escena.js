@@ -985,6 +985,7 @@ if (btnSonido && audio) {
 const elMensaje = document.getElementById('mensaje');
 const elBarra = document.getElementById('avance');
 const elRepetir = document.getElementById('repetir');
+const elRecogida = document.getElementById('recogida');
 const elInicio = document.getElementById('inicio');
 
 const duracion = (texto) => Math.min(
@@ -1019,6 +1020,7 @@ const cierre = async () => {
     boton.classList.add('is-on');
     boton.tabIndex = 0;
   });
+  if (elRecogida) elRecogida.classList.add('is-on');
 };
 
 /* ---------- Momentos ligados a los mensajes ---------- */
@@ -1333,6 +1335,7 @@ if (elRepetir) {
       boton.classList.remove('is-on');
       boton.tabIndex = -1;
     });
+    if (elRecogida) elRecogida.classList.remove('is-on');
     elMensaje.classList.remove('is-on');
     if (elBarra) elBarra.style.width = '0%';
     await esperar(1600);

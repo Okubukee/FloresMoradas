@@ -373,6 +373,52 @@ body{
 .mensajes__repetir.is-on:hover,
 .mensajes__repetir.is-on:focus-visible{transition-delay:0s}
 
+/* datos para recoger el ramo, enmarcados encima del mensaje final */
+.mensajes__recogida{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:100%;
+  width:min(100%,560px);
+  margin:0 auto 18px;
+  padding:14px 20px 16px;
+  border:1px solid rgba(232,201,138,.5);
+  border-radius:16px;
+  background:rgba(12,6,24,.6);
+  box-shadow:0 0 0 4px rgba(12,6,24,.35), inset 0 0 22px rgba(201,155,255,.12);
+  color:#f3e9ff;
+  text-align:center;
+  font:italic 400 clamp(15px,1.6vw,18px)/1.4 'Cormorant Garamond',Georgia,serif;
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transform:translateY(8px);
+  transition:opacity 1.2s ease, transform 1.2s ease, visibility 0s 1.2s;
+}
+.mensajes__recogida.is-on{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+  transform:none;
+  transition:opacity 1.2s ease 1.4s, transform 1.2s ease 1.4s, visibility 0s 1.4s;
+}
+.mensajes__recogida p{margin:0}
+.mensajes__recogida-titulo{
+  margin-bottom:6px !important;
+  color:#e8c98a;
+  font-size:1.15em;
+  letter-spacing:.06em;
+}
+.mensajes__recogida-nota{color:rgba(243,233,255,.7)}
+.mensajes__recogida strong{font-weight:600;color:#fff4dc}
+.mensajes__recogida-codigo{
+  padding:1px 8px;
+  border:1px dashed rgba(232,201,138,.7);
+  border-radius:6px;
+  letter-spacing:.12em;
+  font-style:normal;
+}
+
 /* ---------- La nota bajo el jarron ---------- */
 .nota{pointer-events:none}
 .nota.is-tocable{pointer-events:auto;cursor:pointer}
