@@ -1306,7 +1306,7 @@ const recorrido = async () => {
     const texto = MENSAJES[i];
     elMensaje.textContent = texto;
     elMensaje.classList.add('is-on');
-    if (elBarra) elBarra.style.width = `${((i + 1) / MENSAJES.length) * 100}%`;
+    if (elBarra) elBarra.style.transform = `scaleX(${(i + 1) / MENSAJES.length})`;
     apagarCiudad((i + 1) / MENSAJES.length);
     const alQuitar = momentoDe(texto);
     await esperar(duracion(texto));
@@ -1329,7 +1329,7 @@ if (elRepetir) {
     });
     if (elRecogida) elRecogida.classList.remove('is-on');
     elMensaje.classList.remove('is-on');
-    if (elBarra) elBarra.style.width = '0%';
+    if (elBarra) elBarra.style.transform = 'scaleX(0)';
     await esperar(1600);
     repitiendo = false;
     recorrido();

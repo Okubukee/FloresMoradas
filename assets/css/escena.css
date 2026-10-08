@@ -70,6 +70,10 @@ body{
   max-width:86vw;
   text-align:center;
   pointer-events:none;
+  /* capa propia: si no, la nieve y los parpadeos del SVG obligan a repintar
+     en cada fotograma las sombras del texto y de los botones, y en movil
+     eso congela la escena entera */
+  will-change:transform;
 }
 
 .mensajes__texto{
@@ -85,6 +89,7 @@ body{
   opacity:0;
   transform:translateY(14px);
   transition:opacity 1.2s ease, transform 1.2s ease;
+  will-change:opacity, transform; /* su sombra se pinta una vez por mensaje */
 }
 .mensajes__texto.is-on{
   opacity:1;
@@ -99,13 +104,16 @@ body{
   background:rgba(217,194,242,.10);
   overflow:hidden;
 }
+/* crece con scaleX y no con width: asi no hay que recalcular ni repintar nada */
 .mensajes__avance span{
   display:block;
-  width:0;
+  width:100%;
   height:100%;
   border-radius:2px;
   background:linear-gradient(90deg,var(--violeta-400,#a97ad8),var(--oro,#e8c98a));
-  transition:width 1.4s cubic-bezier(.4,0,.2,1);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform 1.4s cubic-bezier(.4,0,.2,1);
 }
 
 /* ---------- Animaciones internas del SVG ---------- */
@@ -616,6 +624,7 @@ body{
   cursor:pointer;
   background:radial-gradient(120% 90% at 50% 45%,rgba(7,3,18,.35),rgba(7,3,18,.82));
   transition:opacity 1.6s ease, visibility 0s 1.6s;
+  will-change:opacity; /* capa propia, igual que .mensajes */
 }
 .inicio.is-fuera{opacity:0;visibility:hidden;pointer-events:none}
 .inicio:focus-visible{outline:none}
